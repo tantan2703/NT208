@@ -1,57 +1,92 @@
-.footer{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 50px;
-}
-.footer-logo{
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-.footer-logo p{
-    color: #383838;
-    font-size: 46px;
-    font-weight: 700;
-}
-.footer-links{
-    display: flex;
-    list-style: none;
-    gap: 50px;
-    color: #252525;
-    font-size: 20px;
-}
-.footer-links li{
-    cursor: pointer;
+.footer-container {
+    background-color: #fafafb;
+    padding-top: 4rem;
 }
 
-.footer-social-icon{
-    width: 150px;
+.footer {
     display: flex;
-    gap: 20px;
-}
-
-.footer-icons-container{
-    padding: 10px;
-    padding-bottom: 6px;
-    background: #fbfbfb;
-    border: 1px solid #ebebebeb;
-}
-.footer-copyright{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap:  30px;
-    width: 100%;
-    margin-bottom: 30px;
-    color: #1a1a1a;
-    font-size: 20px;
-}
-.footer-copyright hr{
     width: 80%;
+    height: 40vh;
+    background-color: #fafafb;
+    color: #000;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.nav-logo {
+    display: flex;
+    padding-top: 0px;
+    margin-right: 50px;
+    gap: 50px;
+    padding-right: 5px;
+    align-items:flex-start;
+}
+.footer-heading {
+    display: flex;
+    flex-direction: column;
+    margin-right: 4rem;
+    align-items: center;
+    padding-left: 50px;
+}
+
+.footer-heading h2 {
+    margin-bottom: 2rem;
+    align-items: center;
+}
+
+.footer-heading a {
+    color: #000;
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+}
+
+.footer-heading a:hover {
+    color: red;
+    transition: 0.3s ease-out;
+}
+
+.footer-email-form .join {
+    color: #20c5db;
+}
+
+.footer-email-form h2 {
+    margin-left: 4rem;
+    margin-bottom: 2rem;
+}
+
+#footer-email {
+    width: 250px;
+    height: 40px;
+    border-radius: 4px;
+    outline: none;
     border: none;
-    border-radius: 10px;
-    height: 3px;
-    background: #c7c7c7;
+    padding-left: 0.5rem;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    margin-left: 4rem;
+}
+
+#footer-email::placeholder {
+    color: #b1b1b1;
+}
+
+#footer-email-btn {
+    width: 100px;
+    height: 40px;
+    border-radius: 4px;
+    background-color: #20c5db;
+    outline: none;
+    border: none;
+    color: #000;
+    font-size: 1rem;
+}
+
+#footer-email-btn:hover {
+    cursor: pointer;
+    background-color: #337af1;
+    transition: all 0.4s ease-out;
 }
