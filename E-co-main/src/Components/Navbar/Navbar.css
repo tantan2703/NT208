@@ -7,20 +7,18 @@
 .nav-logo{
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
+    margin-left: -20px;
 }
-.nav-logo p{
-    color: #171717;
-    font-size: 38px;
-    font-weight: 600;
-}
+
 .nav-menu{
     display: flex;
     align-items: center;
     list-style: none;
     gap: 50px;
     color: #626262;
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 500;
 }
 .nav-menu li{
@@ -30,13 +28,15 @@
     justify-content: center;
     gap: 3px;
     cursor: pointer;
+    margin-left: -20px;
+    margin-right: 20px;
 }
 .nav-menu hr{
     border: none;
     width: 80%;
     height: 3px;
     border-radius: 10px;
-    background: #FF4141;
+    background: #8353e2;
 }
 .nav-login-cart{
     display: flex;
@@ -58,6 +58,21 @@
 .nav-login-cart button:active{
     background: #f3f3f3;
 }
+
+.user_icon {
+    flex: 1;
+    width: 25px;
+    height: 25px;
+    overflow: hidden;
+}
+
+.cart_icon {
+    flex: 1;
+    width: 25px;
+    height: 25px;
+    overflow: hidden;
+}
+
 .nav-cart-count{
     width: 22px;
     height: 22px;
