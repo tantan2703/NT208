@@ -34,7 +34,24 @@ const Footer = () => {
             <input type="submit" value="Sign up" id="footer-email-btn"></input>
           </div>
         </div>
+        <div className='footer-bottom'>
+          <div className='translate'></div>
+          <div className="footer-copyright">
+            <hr />
+            <p>Copyright @ 2023 - All Right Reserved.</p>
+          </div>
+          <div className="footer-social-icon">
+        
+            <img src={instagram_icon} alt="" />
+        
+            <img src={pinsterster_icon} alt="" />
+        
+            <img src={whatsapp_icon} alt="" />
+        
+          </div>
+       </div>
       </div>
+      
   )
 }
 
