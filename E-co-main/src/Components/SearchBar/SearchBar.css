@@ -1,0 +1,27 @@
+.search {
+    display: flex;
+    margin-top: 180px;
+    height: 100px;
+}
+
+.searchInputs {
+    height: 80px;
+    width: 80%;
+    flex: 1;
+    justify-content: center;
+    display: flex;
+}
+
+.searchInputs input {
+    width: 1000px;
+    height: 70px;
+    font-size: 50px;
+    font-weight: lighter;
+    border: none;
+    border-bottom: 1px solid black;
+    outline: none;
+}
+
+.searchInputs button {
+
+}
