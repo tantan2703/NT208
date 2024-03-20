@@ -1,0 +1,38 @@
+.page1 {
+    margin-top: 10vh;
+    width: 100vw;
+    height: 90vh;
+    overflow: hidden;
+}
+
+.button1 {
+    margin-top: 15rem;
+    margin-bottom: 2rem;
+    background-color:aqua;
+    margin-left: 5.5rem;
+}
+
+.page1_context1{
+    margin-left: 5.5rem;
+    margin-right: 1%;
+}
+
+.page1_context2{
+    margin-left: 5.5rem;
+}
+
+.button2{
+    margin-left: 2%;
+    font-size: x-small;
+}
+
+.img-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.img-container img {
+    width: 100%;
+    height: 100%;
+}
