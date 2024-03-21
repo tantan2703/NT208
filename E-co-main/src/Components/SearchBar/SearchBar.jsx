@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import './SearchBar.css'
 import data_product from '../Assets/all_product'
+import iconsearch from '../Assets/iconsearch.png'
 
 function SearchBar({ placeholder, data }) {
   return (
@@ -10,7 +11,7 @@ function SearchBar({ placeholder, data }) {
           type="text" placeholder='Search for watches'
         />
         <button class="search-button">
-            <img src="https://icons8.com/icon/3159/search" alt="Search" />
+            <img src={iconsearch} alt="Search" />
         </button>
       </div>
     </div>
