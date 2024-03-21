@@ -5,7 +5,7 @@ const Signup = () => {
       <div className='loginsignuplogin'>
       <div className="loginsignup-containerlogin">
       <h2>ALREADY REGISTERED?</h2>
-        <h2>ALREADY REGISTERED?</h2>
+        <h2>CREATE YOUR ACCOUNT</h2>
         <p>if you are already registered with Cartier, login here:  </p>
         <div className="loginsignup-fields">
           <p>Required field*</p>
