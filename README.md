@@ -25,9 +25,28 @@
     - React JS: https://react.dev/
 
     - Express JS: https://expressjs.com/
-    
+
     - MongoDB: https://www.mongodb.com/docs/
 
-## 
+## B. Sơ đồ chức năng trang web 
+
+**Sơ đồ**
+
+    [WatchShop](https://www.mindmeister.com/app/map/3185286379?t=Evq4KLqB6k)
+
+**Function**
+    Trang admin:
+    
+        - CRUD product
+
+        - Feedback
+    
+    Watch Shop:
+
+
+    
+
+
+
 
 
