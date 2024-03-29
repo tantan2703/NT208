@@ -32,7 +32,7 @@
 
 **Sơ đồ**
 
-    [WatchShop](https://www.mindmeister.com/app/map/3185286379?t=Evq4KLqB6k)
+    (https://www.mindmeister.com/app/map/3185286379?t=Evq4KLqB6k)
 
 **Function**
     Trang admin:
