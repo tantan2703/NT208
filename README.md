@@ -42,6 +42,11 @@
         - Feedback
     
     Watch Shop:
+        - Watch: Search, view watch, Filter, Recommend
+        - User: View & change user info, authentication, change password, forget password.
+        - Cart: Add/Remove/Edit watches to/from cart, Add watches from cart to purchase_order, Choose Watches from cart to payment: Paypal
+        - User_purchase_order
+        - Chat room
 
 
     
