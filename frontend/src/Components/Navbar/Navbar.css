@@ -15,6 +15,11 @@
     font-size: 38px;
     font-weight: 600;
 }
+.chat-icon{
+    width: 42px;
+    height: 42px;
+    cursor: pointer;
+}
 .nav-menu{
     display: flex;
     align-items: center;

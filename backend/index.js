@@ -7,6 +7,11 @@ const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const path = require("path");
 const uuid = require("uuid");
+const Product = require('./models/Product');
+const User = require('./models/User');
+const Message = require('./models/Message');
+const { Server } = require('socket.io');
+
 
 app.use(express.json());
 app.use(cors());
@@ -47,39 +52,6 @@ app.post("/upload", upload.single("product"), (req, res) => {
         image_url: `http://localhost:${port}/images/${req.file.filename}`
     });
 });
-
-// Sechema for Creating Products
-const Product = mongoose.model("watch", {
-    id: {
-        type: String,
-        unique: true,
-        required: true,
-    },
-    name: {
-        type: String,
-        required: true,
-    },
-    image: {
-        type: String,
-        required: true,
-    },
-    category: {
-        type: String,
-        required: true,
-    },
-    price: {
-        type: Number,
-        required: true,
-    },
-    date: {
-        type: Date,
-        default: Date.now,
-    },
-    available: {
-        type: Boolean,
-        default: true,
-    },
-}, "watches");
 
 // Add Product API
 
@@ -134,36 +106,13 @@ app.post('/removeproduct', async (req, res) => {
 
 // Get All Products API
 app.get('/allproducts', async (req, res) => {
-    const products = await Product.find();
+    const products = await Product.find({});
     res.json(products);
     console.log("All Products Fetched");
 }
 );
 
 // Creating API for User Authentication
-const User = mongoose.model("user", {
-    username: {
-        type: String,
-        required: true,
-    },
-    email: {
-        type: String,
-        unique: true,
-        required: true,
-    },
-    password: {
-        type: String,
-        required: true,
-    },
-    cartData: {
-        type: Object,
-    },
-    date: {
-        type: Date,
-        default: Date.now,
-    },
-}, "users");
-
 // Creating Endpoint for registering a user
 app.post('/signup', async (req, res) => {
     let check = await User.findOne({ email: req.body.email });
@@ -197,6 +146,12 @@ app.post('/signup', async (req, res) => {
     }
 
     const token = jwt.sign(data, "secret_ecom");
+    let message = await Message.findOne({ user_id: user.id });
+    
+            if (!message) {
+                message = new Message({ user_id: user.id, messages: [] });
+                await message.save();
+            }
     res.json(
         {
             success: true,
@@ -220,6 +175,12 @@ app.post('/login', async (req, res) => {
                 }
             }
             const token = jwt.sign(data, "secret_ecom");
+            let message = await Message.findOne({ user_id: user.id });
+    
+            if (!message) {
+                message = new Message({ user_id: user.id, messages: [] });
+                await message.save();
+            }
             res.json(
                 {
                     success: true,
@@ -249,10 +210,18 @@ app.post('/login', async (req, res) => {
         
 });
 
+// Creating endpoint for getting all users data
+app.get('/allusers', async (req, res) => {
+    const users = await User.find({});
+    res.json(users);
+    console.log(users);
+    console.log("All Users Fetched");
+}
+);
 
 // Creating endpoint for newcollection data
 
-app.get('/newcollection', async (req, res) => {
+app.get('/newcollections', async (req, res) => {
     let products = await Product.find({});
     let newcollection = products.slice(1).slice(-8);
     console.log("New Collection Fetched");
@@ -260,7 +229,7 @@ app.get('/newcollection', async (req, res) => {
 }
 );
 
-// Creating endpoint for popular watches
+// Creating endpoint for popular women watches
 app.get('/popularinwomen', async (req, res) => {
     let products = await Product.find({category:"women"});
     let popular_in_women = products.slice(0, 4);
@@ -323,18 +292,149 @@ app.post('/removefromcart', fetchUser, async (req, res) => {
 
 
 // Creating endpoint for getting cartdata
-app.get('/getcart', fetchUser, async (req, res) => {
+app.post('/getcart', fetchUser, async (req, res) => {
     console.log("Get Cart Data");
     let userData = await User.findOne({ _id: req.user.id });
     res.json(userData.cartData);
 });
 
+
+// Creating endpoint for getiing chat messages
+app.get('/getmessages', fetchUser, async (req, res) => {
+    let message = await Message.find({
+        user_id:req.user.id,
+      });
+    message = message[0];
+    if (!message) {
+        return res.json({messages: []});
+    }
+    res.json(message.messages);
+});
+
+// Creating endpoint for getting all messages
+app.get('/admingetmessages', async (req, res) => {
+    const message = await Message.find({});
+    res.json(message);
+});
+
+
+
 // Listening to the server
-app.listen(port, (err) => {
+const server = app.listen(port, (err) => {
     if (err) {
         console.log("Error in connecting to the server");
     } else {
         console.log("Server is running on port: " + port);
     }
 });
+
+
+const io = new Server({cors: 'http://localhost:8888'});
+// Authentication Middleware
+io.use( async (socket, next) => {
+    const token = socket.handshake.auth.token;
+    if (token === 'admin') {
+        return next();
+    }
+    if (!token) {
+        return next(new Error("Please authenticate using a valid token"));
+    }
+    try {
+        const data = jwt.verify(token, "secret_ecom");
+        socket.user = data.user;
+        socket.join(data.user.id);
+        console.log("User connected: ", data.user.id);
+        next();
+    } catch (error) {
+        return next(new Error("Please authenticate using a valid token"));
+    }
+});
+// Creating Websocket Server
+io.on('connection', async (socket) => {
+    const token = socket.handshake.auth.token;
+    if (token === 'admin') {
+        // Get all users from database and join their rooms by their id
+        const users = await User.find({});
+        users.forEach(user => {
+            socket.join(user._id);
+            console.log("Admin connected to user: ", user._id);
+        });
+    }
+    console.log(socket.id);
+    
+    // Hello from the server
+    socket.emit('message', 'Hello from the server');
+
+    socket.on('message', (data) => {
+        console.log(data);
+    });
+    socket.on('join-room', (room, callback) => {
+        socket.join(room);
+        callback("Joined room: ", room);
+    });
+
+
+    // Admin add message with user id
+    socket.on('adminAddMessage', async (data, callback) => {
+            try
+            {
+                await Message.updateOne(
+                    { user_id: data.user_id }, // Điều kiện tìm kiếm
+                    {
+                        $push: {
+                            messages: {
+                                content: data.content,
+                                timeStamp: Date.now(),
+                                userMessage: data.userMessage
+                            }
+                        }
+                    }
+                );
+                io.to(data.user_id).emit('getMessage');
+                callback("Message sent");
+            }
+            catch (error) {
+                console.error('Lỗi khi thêm tin nhắn:', error);
+            }    
+    });
+
+
+    // Add Message Event
+    socket.on('addMessage', async (data, callback) => {
+        // Add message to database
+        try {
+            let message = await Message.findOne({ user_id: socket.user.id });
+    
+            if (!message) {
+                message = new Message({ user_id: socket.user.id, messages: [] });
+                await message.save();
+            }
+            await Message.updateOne(
+                { user_id: socket.user.id }, // Điều kiện tìm kiếm
+                {
+                    $push: {
+                        messages: {
+                            content: data.content,
+                            timeStamp: Date.now(),
+                            userMessage: data.userMessage
+                        }
+                    }
+                }
+            );
+            
+            console.log('Đã thêm tin nhắn thành công!');
+            callback("Message sent");
+            io.emit('getMessage');
+        } catch (error) {
+            console.error('Lỗi khi thêm tin nhắn:', error);
+        }             
+    });
+});
+
+io.listen(8888, () => {
+    console.log("Socket server is running on port: 8888");
+});
+
+
+
 

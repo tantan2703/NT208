@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
 import './CartItems.css'
 import { ShopContext } from '../../Context/ShopContext'
-import remove_icon from '../Assets/cart_cross_icon.png'
+import CartItemUnit from './CartItemUnit'
 
 const CartItems = () => {
-    const {getTotalCartAmount, all_product, cartItems, removeFromCart} = useContext(ShopContext);
+    const {getTotalCartAmount, all_product, cartItems} = useContext(ShopContext);
   return (
     <div className='cartitems'>
       <div className="cartitems-format-main">
@@ -16,21 +16,12 @@ const CartItems = () => {
         <p>Remove</p>
       </div>
       <hr />
-      {all_product.map((e)=>{
-        if(cartItems[e.id]>0)
+      {all_product.map((e, index)=>{
+        if(e.id in cartItems)
         {
-            return <div>
-                        <div className="cartitems-format cartitems-format-main">
-                            <img src={e.image} alt="" className='cartion-product-icon' />
-                            <p>{e.name}</p>
-                            <p>${e.new_price}</p>
-                            <button className='cartitems-quantity'>{cartItems[e.id]}</button>
-                            <p>{e.new_price*cartItems[e.id]}</p>
-                            <img className='cartitems-remove-icon' src={remove_icon} onClick={()=>{removeFromCart(e.id)}} alt="" />
-                        </div>
-                        <hr />
-          </div>
+            return <CartItemUnit key={index} props={e} quantity={cartItems[e.id]}/> 
         }
+        else
         return null;
       })}
       <div className="cartitems-down">
