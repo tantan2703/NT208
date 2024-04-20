@@ -60,9 +60,13 @@ app.post('/addproduct', async (req, res) => {
         {
             id: generateID(),
             name: req.body.name,
-            image: req.body.image,
-            category: req.body.category,
             price: req.body.price,
+            image: req.body.image,
+            brand: req.body.brand,
+            model: req.body.model,
+            year: req.body.year,
+            sex: req.body.sex,
+            size: req.body.size,
             available: req.body.available,
         }
     )

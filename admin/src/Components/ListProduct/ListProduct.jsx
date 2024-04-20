@@ -34,13 +34,6 @@ const ListProduct = () => {
         <h1>
           All Products List
         </h1>
-        <div className="listproduct-format-main">
-          <p>Products</p>
-          <p>Title</p>
-          <p>Price</p>
-          <p>Category</p>
-          <p>Remove</p>
-        </div>
         <div className="listproduct-allproduct">
           <hr />
           {allProducts.map((product, index) => {
@@ -49,7 +42,11 @@ const ListProduct = () => {
             <img src={product.image} alt="" className="listproduct-product-icon" />
             <p>{product.name}</p>
             <p>${product.price}</p>
-            <p>{product.category}</p>
+            <p>{product.brand}</p>
+            <p>{product.model}</p>
+            <p>{product.size}</p>
+            <p>{product.sex}</p>
+            <p>{product.year}</p>
             <img onClick={()=>{remove_product(product.id)}} src={cross_icon} alt="" className="listproduct-remove-icon" />
           </div>
           })}

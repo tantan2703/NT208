@@ -53,6 +53,7 @@ const MessageContextProvider = (props) => {
         if (currentUserId){
             setCurrentMessage(allMessages.filter((e)=>e.user_id === currentUserId)[0].messages);
         }
+        console.log('currentMessage: ', currentMessage);
     }, [currentUserId, allMessages]);
 
     useEffect(() => {

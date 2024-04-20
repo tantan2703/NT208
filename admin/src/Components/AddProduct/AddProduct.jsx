@@ -4,12 +4,24 @@ import upload_area from '../../assets/upload_area.svg'
 
 const AddProduct = () => {
 
+    // Tạo một list brand
+    const brandList = ['Audemars Piguet', 'Cartier', 'Tudor', 'Breitling', 'Oris',
+    'Richard Mille', 'Hublot', 'IWC', 'Jaeger-LeCoultre', 'Longines',
+    'Omega', 'Panerai', 'Patek Philippe', 'Seiko', 'Sinn', 'Edox',
+    'NOMOS', 'Hamilton', 'Meistersinger', 'Rado', 'TAG Heuer', 'Ebel',
+    'A. Lange & Söhne', 'Vacheron Constantin', 'Zenith'];
+
+    const sexList = ["Men's watch/Unisex", "Women's watch"];
+
     const [image, setImage] = useState(false);
     const [productDetail, setProductDetail] = useState({
         name: '',
-        price: '',
-        category: 'women',
-        image: ''
+        price: 0,
+        image: '',
+        brand: '',
+        model: '',
+        size: '',
+        year: '',
     });
 
     const imageHandler = (e) => {
@@ -56,7 +68,7 @@ const AddProduct = () => {
   return (
     <div className='add-product'>
         <div className="addproduct-itemfield">
-            <p>Product title</p>
+            <p>Watch name</p>
             <input value={productDetail.name} onChange={changHandler} type="text" name='name' placeholder='Type here'/>
         </div>
         <div className="addproduct-itemfield">
@@ -64,11 +76,35 @@ const AddProduct = () => {
             <input value={productDetail.price} onChange={changHandler} type="text" name='price' placeholder='Type here'/>
         </div>
         <div className="addproduct-itemfield">
-            <p>Product Category</p>
-            <select value={productDetail.category} onChange={changHandler} name='category' className='addproduct-selector'>
-                <option value="women">Women</option>
-                <option value="men">Men</option>
-                <option value="kid">Kid</option>
+            <p>Product size</p>
+            <input value={productDetail.size} onChange={changHandler} type="text" name='size' placeholder='Type here'/>
+        </div>
+        <div className="addproduct-itemfield">
+            <p>Year</p>
+            <input value={productDetail.year} onChange={changHandler} type="text" name='year' placeholder='Type here'/>
+        </div>
+        <div className="addproduct-itemfield">
+            <p>Watch model</p>
+            <input value={productDetail.model} onChange={changHandler} type="text" name='model' placeholder='Type here'/>
+        </div>
+        <div className="addproduct-itemfield">
+            <p>Watch Brand</p>
+            <select value={productDetail.brand} onChange={changHandler} name='brand' className='addproduct-selector'>
+                {
+                    brandList.map((brand, index) => {
+                        return <option key={index} value={brand}>{brand}</option>
+                    })
+                }
+            </select>
+        </div>
+        <div className="addproduct-itemfield">
+            <p>Watch Sex</p>
+            <select value={productDetail.sex} onChange={changHandler} name='sex' className='addproduct-selector'>
+                {
+                    sexList.map((brand, index) => {
+                        return <option key={index} value={brand}>{brand}</option>
+                    })
+                }
             </select>
         </div>
         <div className="addproduct-itemfield">

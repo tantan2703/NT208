@@ -22,6 +22,7 @@ const MessageContextProvider = (props) => {
         }).then((response)=>response.json())
         .then((data)=>setAllMessages(data));
 
+
         socketRef.current = io.connect('http://localhost:8888',
     {
         auth: {

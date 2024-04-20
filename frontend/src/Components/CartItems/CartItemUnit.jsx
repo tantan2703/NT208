@@ -24,7 +24,7 @@ const CartItemUnit = ({props, quantity}) => {
         </span>
 
         <div className="quantity-selector">
-          <p className="product-size">Size 8</p>
+          <p className="product-size">Size {props.size}</p>
           <div>
             <span className="quantity-label">Quantity:</span>
             <button className="quantity-button decrease-button">-</button>
