@@ -12,12 +12,12 @@ const Navbar = () => {
     return (
     <div className='navbar'>
       <ul className="nav-menu">
-        <li onClick={()=>{setMenu("watches")}}><Link style={{ textDecoration: 'none'}} to='/'>Watches</Link>{menu==="watches"?<hr/>:<></>}</li>
+        <li onClick={()=>{setMenu("watches")}}><Link style={{ textDecoration: 'none'}} to='/product'>Watches</Link>{menu==="watches"?<hr/>:<></>}</li>
         <li onClick={()=>{setMenu("about")}}><Link style={{ textDecoration: 'none'}} to='/mens'>About us</Link>{menu==="about"?<hr/>:<></>}</li>
         <li onClick={()=>{setMenu("contact")}}><Link style={{ textDecoration: 'none'}} to='/womens'>Contact</Link>{menu==="contact"?<hr/>:<></>}</li>
       </ul>
       <div className="nav-logo">
-        <img src={logo} alt="" />
+      <Link onClick={()=>{setMenu("home")}}to='/'><img src={logo} alt="" /></Link>
       </div>
       <div className="nav-login-cart">
         <Link to='/login'><img src={user_icon} alt="" className='user_icon'/></Link>
