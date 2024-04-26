@@ -1,0 +1,29 @@
+.page2{
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.image{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.col-5{
+    z-index: 0;
+}
+
+.img-clock{
+    margin-left: 3.5rem;
+    width: 85%;
+    height: auto;
+}
+
+.page2_context1{
+    margin-top: 40%;
+    margin-left: 15%;
+}
