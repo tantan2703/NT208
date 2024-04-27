@@ -25,6 +25,9 @@ const ShopContextProvider = (props) => {
             }).then((response)=>response.json())
             .then((data)=>setCartItems(data));
         }
+
+        
+
     },[])
    
     const addToCart = (itemId) => {

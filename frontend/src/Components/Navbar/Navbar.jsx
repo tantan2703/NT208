@@ -5,7 +5,6 @@ import cart_icon from '../Assets/cart_icon.png'
 import chat_icon from '../Assets/chat_icon.png'
 import { Link } from 'react-router-dom'
 import { ShopContext } from '../../Context/ShopContext'
-import dropdown_icon from '../Assets/dropdown_icon.png'
 import user_icon from '../Assets/avatar.png'
 
 const Navbar = () => {
