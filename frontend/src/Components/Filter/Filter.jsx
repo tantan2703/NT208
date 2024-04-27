@@ -11,8 +11,8 @@ function FilterView({menuItems}) {
             </div>
             <div className='Buttons'>
                 {
-                    menuItems.map((val, index) => (
-                        <button key={index} className="Other">
+                    menuItems.map((val, i) => (
+                        <button key={i} className="Other">
                             {val}
                         </button>
                     ))
