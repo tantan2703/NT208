@@ -12,6 +12,8 @@ import women_banner from './Components/Assets/banner_women.png'
 import kids_banner from './Components/Assets/banner_kids.png'
 import Login from './Components/LoginSignup/Login';
 import Signup from './Components/LoginSignup/Signup';
+import UserProfile from './Pages/UserProfile';
+import jeremybudimanunsplash from './Components/Assets/jeremy-budiman-unsplash.jpg' 
 
 
 function App() {
@@ -21,7 +23,7 @@ function App() {
       <Navbar/>
       <Routes>
         <Route path='/' element={<Shop/>}/>
-        <Route path='/mens' element={<ShopCategory banner={men_banner} category="men"/>}/>
+        <Route path='/watches' element={<ShopCategory banner={jeremybudimanunsplash} />}/>
         <Route path='/womens' element={<ShopCategory banner={women_banner} category="women"/>}/>
         <Route path='/kids' element={<ShopCategory banner={kids_banner} category="kid"/>}/>
         <Route path='product'>
@@ -31,6 +33,7 @@ function App() {
         <Route path='/chatpage' element={<ChatPage/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/signup' element={<Signup/>}/>
+        <Route path='/profile/:activepage' element={<UserProfile/>}/>
       </Routes>
       <Footer/>
       </BrowserRouter>

@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 export const ShopContext = createContext(null);
 
 const ShopContextProvider = (props) => {
-    
+    const [User,setUser] = useState({});
     const [all_product,setAll_Product] = useState([]);
     const [cartItems, setCartItems] = useState({"0": 0});
 
@@ -24,6 +24,16 @@ const ShopContextProvider = (props) => {
                 body:"",
             }).then((response)=>response.json())
             .then((data)=>setCartItems(data));
+
+            fetch('/getinfo',{
+                method:'POST',
+                headers:{
+                    Accept:'application/form-data',
+                    'auth-token':`${localStorage.getItem('auth-token')}`,
+                    'Content-Type':'application/json',
+                },
+            }).then((response)=>response.json())
+            .then((data)=>setUser(data));
         }
 
         
@@ -92,7 +102,7 @@ const ShopContextProvider = (props) => {
         return totalItem;
     }
 
-    const contextValue = {getTotalCartItems, getTotalCartAmount, all_product, cartItems, addToCart, removeFromCart}
+    const contextValue = {User, getTotalCartItems, getTotalCartAmount, all_product, cartItems, addToCart, removeFromCart}
     return(
         <ShopContext.Provider value={contextValue}>
             {props.children}

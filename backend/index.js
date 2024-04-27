@@ -302,6 +302,11 @@ app.post('/getcart', fetchUser, async (req, res) => {
     res.json(userData.cartData);
 });
 
+// Creating endpoint for user profile
+app.post('/getinfo',fetchUser,async(req,res)=>{
+    let user = await User.findOne({_id:req.user.id});
+    res.json(user);
+  })
 
 // Creating endpoint for getiing chat messages
 app.get('/getmessages', fetchUser, async (req, res) => {
@@ -320,6 +325,16 @@ app.get('/admingetmessages', async (req, res) => {
     const message = await Message.find({});
     res.json(message);
 });
+
+app.post('/changeinfo',async(req,res)=>{
+    let user = await User.findOne({email:req.body.email});
+    user.name = req.body.username;
+    user.email = req.body.email;
+    await user.updateOne({name:user.name,email:user.email});
+    console.log("Updated User Info");
+    res.json({success:true,alert:"User Info Updated"});
+    //res.json({success:false,errors:"Wrong Email Id"})
+  })
 
 
 
