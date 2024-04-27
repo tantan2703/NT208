@@ -7,7 +7,6 @@ import Shop from './Pages/Shop';
 import Cart from './Pages/Cart';
 import ChatPage from './Pages/ChatPage';
 import Footer from './Components/Footer/Footer';
-import men_banner from './Components/Assets/banner_mens.png'
 import women_banner from './Components/Assets/banner_women.png'
 import kids_banner from './Components/Assets/banner_kids.png'
 import Login from './Components/LoginSignup/Login';
@@ -25,8 +24,8 @@ function App() {
       <Routes>
         <Route path='/' element={<Shop/>}/>
         <Route path='/watches' element={<ShopCategory banner={jeremybudimanunsplash} />}/>
-        <Route path='/womens' element={<ShopCategory banner={women_banner} category="women"/>}/>
-        <Route path='/kids' element={<ShopCategory banner={kids_banner} category="kid"/>}/>
+        <Route path='/womens' element={<ShopCategory banner={women_banner} />}/>
+        <Route path='/kids' element={<ShopCategory banner={kids_banner} />}/>
         <Route path='product'>
           <Route path=':productId' element={<Product/>}/>
         </Route>
