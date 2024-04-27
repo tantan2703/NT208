@@ -17,7 +17,7 @@ const Login = () => {
   const login = async () =>{
     console.log("Login Function Excuted",formData)
     let responseData;
-    await fetch('http://localhost:4000/login',{
+    await fetch('/login',{
       method:'POST',
       headers:{
         Accept:'application/form-data',

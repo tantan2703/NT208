@@ -12,7 +12,7 @@ const MessageContextProvider = (props) => {
     useEffect(() => {
         console.log('test context');
         // Get all messages from database
-        fetch('http://localhost:4000/getmessages',{
+        fetch('/getmessages',{
             method:'GET',
             headers:{
                 Accept:'application/form-data',
@@ -39,7 +39,7 @@ const MessageContextProvider = (props) => {
         // Kết nối đến WebSocket server    
         socketRef.current.on('getMessage', () => {
             // Get all messages from database
-            fetch('http://localhost:4000/getmessages',{
+            fetch('/getmessages',{
                 method:'GET',
                 headers:{
                     Accept:'application/form-data',

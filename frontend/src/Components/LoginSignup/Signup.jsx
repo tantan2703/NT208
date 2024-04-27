@@ -16,7 +16,7 @@ const Signup = () => {
 const signup = async () =>{
     console.log("signup Function Excuted",formData);
     let responseData;
-    await fetch('http://localhost:4000/signup',{
+    await fetch('/signup',{
       method:'POST',
       headers:{
         Accept:'application/form-data',
