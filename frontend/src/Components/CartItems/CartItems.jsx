@@ -8,14 +8,12 @@ const CartItems = () => {
   return (
     <div className='cartitems'>
       <div className="cartitems-format-main">
-        <p>Products</p>
-        <p>Title</p>
-        <p>Price</p>
-        <p>Quantity</p>
-        <p>Total</p>
-        <p>Remove</p>
+      
+      <div className="cartitems-left">
+      <div className="title-cart">
+        <h1>Your Cart</h1>
       </div>
-      <hr />
+      <div className="Items-cart">
       {all_product.map((e, index)=>{
         if(e.id in cartItems)
         {
@@ -24,9 +22,12 @@ const CartItems = () => {
         else
         return null;
       })}
-      <div className="cartitems-down">
+      </div>
+      
+        </div>
+
+        <div className="cartitems-right">
         <div className="cartitems-total">
-          <h1>cart Totals</h1>
             <div>
               <div className="cartitems-total-item">
                 <p>Subtatal</p>
@@ -53,6 +54,9 @@ const CartItems = () => {
           </div>
         </div>
       </div>
+      </div>
+      
+      
     </div>
   )
 }

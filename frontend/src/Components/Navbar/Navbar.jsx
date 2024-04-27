@@ -6,6 +6,7 @@ import chat_icon from '../Assets/chat_icon.png'
 import { Link } from 'react-router-dom'
 import { ShopContext } from '../../Context/ShopContext'
 import user_icon from '../Assets/avatar.png'
+import dropdown_icon from '../Assets/dropdown_icon.png'
 
 const Navbar = () => {
   
@@ -19,7 +20,8 @@ const Navbar = () => {
   }
   return (
     <div className='navbar'>
-      <ul className="nav-menu">
+      <img className='nav-dropdown' onClick={dropdown_toggle} src={dropdown_icon} alt="" />
+      <ul ref={menuRef} className="nav-menu">
       <li onClick={()=>{setMenu("watches")}}><Link style={{ textDecoration: 'none'}} to='/watches'>Watches</Link>{menu==="watches"?<hr/>:<></>}</li>
         <li onClick={()=>{setMenu("about")}}><Link style={{ textDecoration: 'none'}} to='/'>About us</Link>{menu==="about"?<hr/>:<></>}</li>
         <li onClick={()=>{setMenu("contact")}}><Link style={{ textDecoration: 'none'}} to='/'>Contact</Link>{menu==="contact"?<hr/>:<></>}</li>
