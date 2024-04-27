@@ -10,7 +10,7 @@ function SearchBar({ placeholder, data }) {
         <input
           type="text" placeholder='Search for watches'
         />
-        <button class="search-button">
+        <button className="search-button">
             <img src={iconsearch} alt="Search" />
         </button>
       </div>
