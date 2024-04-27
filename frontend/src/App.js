@@ -20,6 +20,7 @@ function App() {
   return (
     <div >
       <BrowserRouter>
+      saiocosajci 
       <Navbar/>
       <Routes>
         <Route path='/' element={<Shop/>}/>
