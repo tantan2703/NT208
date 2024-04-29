@@ -62,9 +62,9 @@ useEffect(()=>{
         <p>
           <span>Showing 1-12</span> out of 36 products
         </p>
-        <div className="shopcategory-sort">
+        {/* <div className="shopcategory-sort">
         Sort by <img src={dropdpwn_icon} alt="" />
-        </div>
+        </div> */}
       </div>
       <div className="shopcategory-products">
       {viewProductIds.map((id , i) => {
@@ -72,7 +72,7 @@ useEffect(()=>{
     if (product) {
         return <Item key={i} id={product.id} name={product.name} image={product.image} price={product.price} />;
     } else {
-        return null; // Hoặc thực hiện hành động khác tùy thuộc vào yêu cầu của bạn
+        return null; 
     }
 })}
       </div>
