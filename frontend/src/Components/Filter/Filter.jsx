@@ -3,7 +3,6 @@ import './Filter.css'
 import all_product from '../Assets/all_product'
 
 function FilterView({menuItems}) {
-    console.log(menuItems);
     return (
         <div className='Filter'>
             <div className='Type'>
