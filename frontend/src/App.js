@@ -1,7 +1,7 @@
 import './App.css';
 import Navbar from './Components/Navbar/Navbar';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ShopCategory from './Pages/ShopCategory';
+import SearchProductPage from './Pages/SearchProductPage';
 import Product from './Pages/Product';
 import Shop from './Pages/Shop';
 import Cart from './Pages/Cart';
@@ -22,9 +22,9 @@ function App() {
       <Navbar/>
       <Routes>
         <Route path='/' element={<Shop/>}/>
-        <Route path='/watches' element={<ShopCategory banner={jeremybudimanunsplash} />}/>
-        <Route path='/womens' element={<ShopCategory banner={women_banner} />}/>
-        <Route path='/kids' element={<ShopCategory banner={kids_banner} />}/>
+        <Route path='/watches' element={<SearchProductPage banner={jeremybudimanunsplash} />}/>
+        <Route path='/womens' element={<SearchProductPage banner={women_banner} />}/>
+        <Route path='/kids' element={<SearchProductPage banner={kids_banner} />}/>
         <Route path='product'>
           <Route path=':productId' element={<Product/>}/>
         </Route>

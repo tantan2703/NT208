@@ -17,8 +17,8 @@ const CartItemUnit = ({props, quantity}) => {
         <h2 className="product-name">{props.name}</h2>
         <span className="price-des">
           <div className="description">
-            <p className="product-category">Women's Hard Court Tennis Shoe</p>
-            <p className="product-color">Black/White/Metallic Red Bronze</p>
+            <p className="product-category">{props.model}</p>
+            <p className="product-color">{props.sex}</p>
           </div>
           <p className="product-price">${props.price}</p>
         </span>

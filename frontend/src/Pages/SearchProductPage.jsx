@@ -9,10 +9,10 @@ import { useState } from 'react'
 import '../Components/SearchBar/SearchBar.css'
 import iconsearch from '../Components/Assets/iconsearch.png'
 import iconImageSearch from '../Components/Assets/imageSearchIcon.png'
-import HomePage from '../Components/HomePage/HomePage'
+import SearchProduct from '../Components/SearchProduct/SearchProduct'
 
-const ShopCategory = (props) => {
-  return HomePage(props)
+const SearchProductPage = (props) => {
+  return SearchProduct(props)
 }
 
-export default ShopCategory
+export default SearchProductPage
