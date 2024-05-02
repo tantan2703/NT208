@@ -326,6 +326,50 @@ app.get('/admingetmessages', async (req, res) => {
     res.json(message);
 });
 
+const fs = require('fs');
+
+const imageSearchStorage = multer.diskStorage({
+    destination: "./upload/imageSearch/",
+    filename:(req, file, cb) => {
+        cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
+    }
+});
+
+const imageSearchUpload = multer(
+    {
+        storage: imageSearchStorage,
+    })
+
+    // Creating Upload Endpoint for imageSearch
+app.use("/imagesearchstorage", express.static("upload/imageSearch"));
+
+app.post('/imagesearch',imageSearchUpload.single('query_img'), async (req, res) => {
+    try {
+        // Kiểm tra xem có file query_img không
+        if (!req.file) {
+            return res.status(400).send('No image was uploaded.');
+        }
+        // Tạo formData mới để gửi đến URL khác
+        let imageSearchformData = new FormData();
+
+        console.log(req.file);
+
+        imageSearchformData.append('query_img', req.file.filename);
+
+        // Gửi formData đến URL khác
+        const response = await fetch('http://localhost:5001/imagesearch', {
+            method: 'POST',
+            body: imageSearchformData
+        });
+
+        // Đọc và trả về phản hồi từ URL khác
+        res.json(await response.json());
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 app.post('/changeinfo',async(req,res)=>{
     let user = await User.findOne({email:req.body.email});
     user.name = req.body.username;

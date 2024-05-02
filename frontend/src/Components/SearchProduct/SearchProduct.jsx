@@ -20,9 +20,11 @@ const [viewProductIds, setViewProductIds] = useState([]);
   const imageHandler = async (e) => {
   let formData = new FormData();
 
+  console.log(e.target.files[0]);
+
   formData.append('query_img', e.target.files[0]);
   
-   await fetch('http://localhost:5001/imagesearch', {
+   await fetch('/imagesearch', {
     method: 'POST',
     body: formData,
   }).then((response) =>response.json()).then((data) => setViewProductIds(data.scores));

@@ -1,5 +1,6 @@
 import numpy as np
 from PIL import Image
+import requests
 from feature_extractor import FeatureExtractor
 from datetime import datetime
 from flask import Flask, json, request, render_template, jsonify
@@ -33,16 +34,22 @@ features = np.array(features)
 
 @app.post("/imagesearch")
 def index():
-    print(request)
-    file = request.files["query_img"]
+    print(request.form)
+    image_filename = request.form["query_img"]
+    image_url = 'http://localhost:4000/imagesearchstorage/' + image_filename
 
+    # Fetch image from URL
+    img = Image.open(requests.get(image_url, stream=True).raw)
+    img = img.convert("RGB")
+    img = img.resize((224, 224))
+
+    
     # Save query image
-    img = Image.open(file.stream)  # PIL image
     uploaded_img_path = (
         "imageSearchService/static/uploaded/"
         + datetime.now().isoformat().replace(":", ".")
         + "_"
-        + file.filename
+        + image_filename
     )
     img.save(uploaded_img_path)
 
