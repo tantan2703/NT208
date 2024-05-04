@@ -7,8 +7,11 @@ import SearchBar from '../SearchBar/SearchBar'
 import FilterView from '../Filter/Filter'
 import { useState } from 'react'
 import '../SearchBar/SearchBar.css'
+import './SearchProduct.css'
 import iconsearch from '../Assets/iconsearch.png'
 import iconImageSearch from '../Assets/imageSearchIcon.png'
+import SingleBanner from '../Banners/Banner'
+import banner_img from '../Assets/jeremy-budiman-unsplash.jpg'
 
 const HomePage = (props) => {
   const {all_product} = useContext(ShopContext);
@@ -41,7 +44,7 @@ useEffect(()=>{
   // const menuItems = [... new Set(all_product.map((val) => val.category))];
   return (
     <div className='shop-category'>
-      <img className='shopcategory-banner' src={props.banner} alt="" />
+      <SingleBanner heading='Product' bannerimage={banner_img}/> 
       {/* <SearchBar/> */}
       <div className="search">
       <div className="searchInputs">

@@ -1,12 +1,16 @@
 import React from 'react'
 import './Breadcrums.css'
 import arrow_icon from '../Assets/breadcrum_arrow.png'
+import BreadcrumbItem from '../BreadcrumsItem/BreadcrumsItem'
 const Breadcrums = (props) => {
   const {product} = props;
     return (
-    <div className='breadcrum'>
-      HOME <img src={arrow_icon} alt="" /> SHOP <img src={arrow_icon} alt="" /> {product.category} <img src={arrow_icon} alt="" /> {product.name}
-    </div>
+      <nav aria-label="Breadcrumb" className="flex gap-5 self-start text-sm leading-5">
+      <BreadcrumbItem href="/">Home</BreadcrumbItem>
+      <BreadcrumbItem href="/shop">Shop</BreadcrumbItem>
+      <div className="flex-auto">Productss type</div>
+      <div className="text-zinc-900">Detail</div>
+    </nav>
   )
 }
 
