@@ -6,7 +6,7 @@ from datetime import datetime
 from flask import Flask, json, request, render_template, jsonify
 from pathlib import Path
 from pymongo import MongoClient
-import ast
+from offline import train
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -30,6 +30,23 @@ for feature_path in Path("imageSearchService/static/feature").glob("*.npy"):
     img_ids.append(watch)
     
 features = np.array(features)
+
+@app.get("/retrain")
+def retrain():
+    train()
+    
+    features = []
+    img_ids = []
+    for feature_path in Path("imageSearchService/static/feature").glob("*.npy"):
+        features.append(np.load(feature_path))
+        img_id = "/images/" + feature_path.stem + ".png"
+    
+        watch = collection.find_one({"image": img_id})
+
+        img_ids.append(watch)
+        
+    features = np.array(features)
+    return {"status": "success"}
 
 
 @app.post("/imagesearch")
@@ -55,8 +72,19 @@ def index():
 
     # Run search
     query = fe.extract(img)
-    dists = np.linalg.norm(features - query, axis=1)  # L2 distances to features
+
+    # L2 distances to features
+    dists = []
+    # dists = np.linalg.norm(features - query, axis=(1, 2)) 
+    for feature in features:
+        dists.append(np.linalg.norm(feature - query))
+    dists = np.array(dists)
+    print(dists)
+    
     ids = np.argsort(dists)[:30]  # Top 30 results
+
+    print(ids)
+
     scores = [img_ids[id]['id'] for id in ids]
     return {"scores": scores}
 

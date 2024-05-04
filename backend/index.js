@@ -1,6 +1,18 @@
 const port = 4000;
+const http = require('http');
 const express = require('express');
 const app = express();
+
+let isAdminExist = false;
+
+const server = http.createServer(app);
+// Pass a http.Server instance to the listen method
+const io = require('socket.io')(server, {
+    cors: {
+        origin : '*',
+        socket: ['websocket'],
+    }
+});
 const cors = require('cors');
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
@@ -10,7 +22,6 @@ const uuid = require("uuid");
 const Product = require('./models/Product');
 const User = require('./models/User');
 const Message = require('./models/Message');
-const { Server } = require('socket.io');
 
 
 app.use(express.json());
@@ -165,7 +176,60 @@ app.post('/signup', async (req, res) => {
 }
 );
 
-// Creating endpoint for user login
+// Admin signup
+app.get('/adminsignup', async (req, res) => {
+    if (isAdminExist) {
+        return res.json({success: false, message: "Admin already exists"});
+    }
+    let check = await User.findOne({ email: req.body.email });
+    if (check) {
+        return res
+        .status(400)
+        .json(
+            {
+                success: false,
+                message: "Email already exists",
+            }
+        );
+    }
+    let cart = {};
+    cart["0"] = 0;
+    const user = new User(
+        {
+            username: 'admin',
+            email: 'admin',
+            password: 'admin',
+            cartData: cart,
+        }
+    );
+
+    await user.save();
+
+    const data = {
+        user:{
+            id: user.id,
+        }
+    }
+
+    const token = jwt.sign(data, "admin");
+    isAdminExist = true;
+    let message = await Message.findOne({ user_id: user.id });
+    
+            if (!message) {
+                message = new Message({ user_id: user.id, messages: [] });
+                await message.save();
+            }
+    res.json(
+        {
+            success: true,
+            token: token,
+        }
+    );
+}
+);
+
+
+// Creating endpoint for user/admin login
 app.post('/login', async (req, res) => {
     let user = await User.findOne({ email: req.body.email });
     if (user) 
@@ -178,19 +242,28 @@ app.post('/login', async (req, res) => {
                     id: user.id,
                 }
             }
-            const token = jwt.sign(data, "secret_ecom");
+            const token = req.body.email == 'admin'?jwt.sign(data, "admin"):jwt.sign(data, "secret_ecom");
             let message = await Message.findOne({ user_id: user.id });
     
             if (!message) {
                 message = new Message({ user_id: user.id, messages: [] });
                 await message.save();
             }
+            req.body.email === 'admin' ?res.json(
+                {
+                    success: true,
+                    token: token,
+                    admin: true,
+                }
+            ):
             res.json(
                 {
                     success: true,
                     token: token,
+                    admin: false,
                 }
-            );
+            )
+            ;
         }
         else
         {
@@ -261,6 +334,32 @@ const fetchUser = async (req, res, next) => {
             });
         }
 }
+
+// Creating middleware for admin authentication
+const fetchAdmin = async (req, res, next) => {
+    const token = req.header("auth-token");
+    if (!token) {
+        res.send({
+            isAdmin: false,
+            errors: "Please authenticate using a valid token",
+        });
+    }
+    else
+        try {
+            const data = jwt.verify(token, "admin");
+            req.user = data.user;
+            next();
+        } catch (error) {
+            res.send({
+                isAdmin: false,
+                errors: "Please authenticate using a valid token",
+            });
+        }
+}
+
+app.get('/isadmin', fetchAdmin, async (req, res) => {
+    res.json({isAdmin: true});
+});
 
 
 // Creating endpoint for adding products in cartdata
@@ -370,6 +469,17 @@ app.post('/imagesearch',imageSearchUpload.single('query_img'), async (req, res) 
     }
 });
 
+// Midlleware for reatrain model
+app.get('/retrain', async (req, res) => {
+    try {
+        const response = await fetch('http://localhost:5001/retrain');
+        res.json(await response.json());
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 app.post('/changeinfo',async(req,res)=>{
     let user = await User.findOne({email:req.body.email});
     user.name = req.body.username;
@@ -380,19 +490,6 @@ app.post('/changeinfo',async(req,res)=>{
     //res.json({success:false,errors:"Wrong Email Id"})
   })
 
-
-
-// Listening to the server
-const server = app.listen(port, (err) => {
-    if (err) {
-        console.log("Error in connecting to the server");
-    } else {
-        console.log("Server is running on port: " + port);
-    }
-});
-
-
-const io = new Server({cors: 'http://localhost:8888'});
 // Authentication Middleware
 io.use( async (socket, next) => {
     const token = socket.handshake.auth.token;
@@ -494,8 +591,13 @@ io.on('connection', async (socket) => {
     });
 });
 
-io.listen(8888, () => {
-    console.log("Socket server is running on port: 8888");
+// Listening to the server
+server.listen(port, (err) => {
+    if (err) {
+        console.log("Error in connecting to the server");
+    } else {
+        console.log("Server is running on port: " + port);
+    }
 });
 
 

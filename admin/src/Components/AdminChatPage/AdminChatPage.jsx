@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react'
-import './ChatPage.css'
+import './AdminChatPage.css'
 import AdminIcon from '../../assets/admin_icon.png'
 import {MainContainer, ChatContainer, MessageList, MessageInput, ConversationHeader, Avatar, Message, Sidebar, ConversationList, Conversation} from '@chatscope/chat-ui-kit-react'
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import { MessageContext } from '../../Context/MessageContext';
 
-const ChatPage = () => {
+const AdminChatPage = () => {
     const {currentMessage, addMessage, allUsers, currentUserId, setCurrentUserId, currenUsername, setCurrentUsername, setTest, test} = useContext(MessageContext);
 
 const handleConversationClick = (e) => {
@@ -73,4 +73,4 @@ function sendMessage(e){
   )
 }
 
-export default ChatPage
+export default AdminChatPage

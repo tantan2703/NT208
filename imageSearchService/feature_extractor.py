@@ -1,5 +1,6 @@
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.vgg16 import VGG16, preprocess_input
+from tensorflow.keras.applications.densenet import DenseNet121
 from tensorflow.keras.models import Model
 import numpy as np
 import os
@@ -10,6 +11,9 @@ class FeatureExtractor:
     def __init__(self):
         base_model = VGG16(weights='imagenet')
         self.model = Model(inputs=base_model.input, outputs=base_model.get_layer('fc1').output)
+
+        # base_model = DenseNet121(weights='imagenet', include_top=False)
+        # self.model = Model(inputs=base_model.input, outputs=base_model.get_layer('relu').output)
 
     def extract(self, img):
         """

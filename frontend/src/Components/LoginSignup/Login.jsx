@@ -1,7 +1,9 @@
 import React from 'react'
 import './LoginSignup.css'
 import { useState } from 'react'
+import { AuthenticationContext } from '../../Context/AuthenticationContext'
 const Login = () => {
+  const {setAuthToken, setIsAdmin} = React.useContext(AuthenticationContext);
   
   const [formData,setFormData] = useState({
     username:"",
@@ -27,11 +29,19 @@ const Login = () => {
     }).then((response)=> response.json()).then((data)=>responseData=data)
   
     if(responseData.success) {
-      localStorage.setItem('auth-token',responseData.token);
-      window.location.replace("/");
+      localStorage.setItem('auth-token', responseData.token);
+      setAuthToken(responseData.token);
+      if (responseData.admin) {
+        window.location.replace("/admin");
+        setIsAdmin(true);
+      }
+      else {
+        window.location.replace("/");
+        setIsAdmin(false);
+      }
     }
     else {
-      alert(responseData.errors)
+      alert(responseData.message)
     }
   }
   return (

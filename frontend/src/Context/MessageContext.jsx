@@ -23,14 +23,14 @@ const MessageContextProvider = (props) => {
         .then((data)=>setAllMessages(data));
 
 
-        socketRef.current = io.connect('http://localhost:8888',
+        socketRef.current = io.connect('/',
     {
         auth: {
             token: localStorage.getItem('auth-token')
         }
     });
 
-    socketRef.current = io.connect('http://localhost:8888',
+    socketRef.current = io.connect('/',
     {
         auth: {
             token: localStorage.getItem('auth-token')

@@ -5,21 +5,24 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import  ShopContextProvider  from './Context/ShopContext';
 import MessageContextProvider from './Context/MessageContext';
+import AdminMessageContextProvider from './Context/AdminMessageContext';
+import AuthenticationContextProvider  from './Context/AuthenticationContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  
-  
+  <AuthenticationContextProvider>
     <ShopContextProvider>
+      
+      <AdminMessageContextProvider>
       <MessageContextProvider>
       <React.StrictMode>
       <App />
       </React.StrictMode>
       </MessageContextProvider>
+      </AdminMessageContextProvider>
+      
     </ShopContextProvider>
-  
-    
-  
+    </AuthenticationContextProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

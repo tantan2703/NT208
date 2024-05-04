@@ -7,8 +7,11 @@ import { Link } from 'react-router-dom'
 import { ShopContext } from '../../Context/ShopContext'
 import user_icon from '../Assets/avatar.png'
 import dropdown_icon from '../Assets/dropdown_icon.png'
+import { AuthenticationContext } from '../../Context/AuthenticationContext'
 
 const Navbar = () => {
+
+  const {setAuthToken} = useContext(AuthenticationContext);
   
   const [menu,setMenu] = useState("shop");
   const {getTotalCartItems} = useContext(ShopContext);
@@ -31,7 +34,7 @@ const Navbar = () => {
       </div>
       <div className="nav-login-cart">
       {localStorage.getItem('auth-token')
-        ? <button onClick={()=>{localStorage.removeItem('auth-token');window.location.replace("/")}}>Logout</button> 
+        ? <button onClick={()=>{setAuthToken(null);localStorage.removeItem('auth-token');window.location.replace("/")}}>Logout</button> 
       :<Link to='/login'><button>Login</button></Link>}
         <Link to='/profile/overview'><img src={user_icon} alt="" className='user_icon'/></Link>
         <Link to='/cart'><img src={cart_icon} alt="" className='cart_icon'/></Link>

@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
-import './AddProduct.css'
-import upload_area from '../../assets/upload_area.svg'
+import './AdminAddProduct.css'
+import upload_area from '../Assets/upload_area.svg'
 
-const AddProduct = () => {
+const AdminAddProduct = () => {
 
     // Tạo một list brand
     const brandList = ['Audemars Piguet', 'Cartier', 'Tudor', 'Breitling', 'Oris',
@@ -40,7 +40,7 @@ const AddProduct = () => {
         let formData = new FormData();
         formData.append('product', image);
 
-        await fetch('/api/upload', {
+        await fetch('/upload', {
             method: 'POST',
             headers: {
                 Accept: 'application/json'
@@ -52,7 +52,7 @@ const AddProduct = () => {
         {
             product.image = responseData.image_url;
             console.log(product);
-            await fetch('/api/addproduct', {
+            await fetch('/addproduct', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ const AddProduct = () => {
             }).catch((err) => console.log(err));
 
             // retrain model
-            await fetch('/api/retrain', {
+            await fetch('/retrain', {
                 method: 'GET',
             }).then((response) => response.json()).then((data) => {
                 console.log(data);
@@ -125,4 +125,4 @@ const AddProduct = () => {
   )
 }
 
-export default AddProduct
+export default AdminAddProduct

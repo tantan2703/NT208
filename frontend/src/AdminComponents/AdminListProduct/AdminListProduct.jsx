@@ -1,13 +1,13 @@
 import React, {useState, useEffect} from 'react'
-import './ListProduct.css'
-import cross_icon from '../../assets/cross_icon.png'
+import './AdminListProduct.css'
+import cross_icon from '../Assets/cross_icon.png'
 
-const ListProduct = () => {
+const AdminListProduct = () => {
 
   const [allProducts, setAllProducts] = useState([]);
 
   const fetchProducts = async () => {
-    await fetch('/api/allproducts').then((response) => response.json())
+    await fetch('/allproducts').then((response) => response.json())
     .then((data) => {
       setAllProducts(data);
     });
@@ -18,7 +18,7 @@ const ListProduct = () => {
   }, [])
 
   const remove_product = async (product_id)=> {
-    await fetch('/api/removeproduct',{
+    await fetch('/removeproduct',{
       method:'POST',
       headers:{
         Accept:'application/json',
@@ -39,7 +39,7 @@ const ListProduct = () => {
           {allProducts.map((product, index) => {
             console.log(product.image);
             return <div key={index} className="listproduct-format-main listproduct-format">
-            <img src={`/api${product.image}`} alt="" className="listproduct-product-icon" />
+            <img src={`${product.image}`} alt="" className="listproduct-product-icon" />
             <p>{product.name}</p>
             <p>${product.price}</p>
             <p>{product.brand}</p>
@@ -55,4 +55,4 @@ const ListProduct = () => {
   )
 }
 
-export default ListProduct
+export default AdminListProduct

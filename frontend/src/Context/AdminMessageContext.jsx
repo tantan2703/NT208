@@ -2,9 +2,9 @@ import React, { createContext, useState, useEffect } from 'react'
 import io from 'socket.io-client';
 
 
-export const MessageContext = createContext(null);
+export const AdminMessageContext = createContext(null);
 
-const MessageContextProvider = (props) => {
+const AdminMessageContextProvider = (props) => {
     const [allMessages, setAllMessages] = useState([]);
     const [currentMessage, setCurrentMessage] = useState({messages: []});
     const [allUsers, setAllUsers] = useState([]);
@@ -37,14 +37,14 @@ const MessageContextProvider = (props) => {
         });
         socket.on('getMessage', () => {
             // Get all messages from database
-            fetch('/api/admingetmessages',{
+            fetch('/admingetmessages',{
                 method:'GET',
             }).then((response)=>response.json())
             .then((data)=>setAllMessages(data));
         });
         // Get all users from database
         try {
-            fetch('/api/allusers',{
+            fetch('/allusers',{
                         method:'GET',
                     }).then((response)=>response.json())
                     .then((data)=>setAllUsers(data));
@@ -64,7 +64,7 @@ const MessageContextProvider = (props) => {
     }, [currentUserId, allMessages]);
 
     useEffect(() => {
-        fetch('/api/admingetmessages',{
+        fetch('/admingetmessages',{
             method:'GET',
         }).then((response)=>response.json())
         .then((data)=>setAllMessages(data));
@@ -83,10 +83,10 @@ const MessageContextProvider = (props) => {
     }
     const contextValue = {allMessages, addMessage, allUsers, currentUserId, setCurrentUserId, currenUsername, setCurrentUsername, reload, setReload, currentMessage}
     return (
-        <MessageContext.Provider value={contextValue}>
+        <AdminMessageContext.Provider value={contextValue}>
             {props.children}
-        </MessageContext.Provider>
+        </AdminMessageContext.Provider>
     )
 }
 
-export default MessageContextProvider
+export default AdminMessageContextProvider
