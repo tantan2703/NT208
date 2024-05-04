@@ -30,7 +30,7 @@ const Navbar = () => {
         <li onClick={()=>{setMenu("contact")}}><Link style={{ textDecoration: 'none'}} to='/'>Contact</Link>{menu==="contact"?<hr/>:<></>}</li>
       </ul>
       <div className="nav-logo">
-        <img src={logo} alt="" />
+        <Link to="/watches"><img src={logo} alt="" /></Link>
       </div>
       <div className="nav-login-cart">
       {localStorage.getItem('auth-token')

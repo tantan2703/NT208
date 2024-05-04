@@ -47,6 +47,8 @@
         - Cart: Add/Remove/Edit watches to/from cart, Add watches from cart to purchase_order, Choose Watches from cart to payment: Paypal
         - User_purchase_order
         - Chat room
+        - Checkout kienpt
+        - Checkout kienpt2
 
 
     
