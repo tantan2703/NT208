@@ -18,7 +18,7 @@ const AdminNavbar = () => {
 
   return (
     <div className='navbar'>
-        <img src={navlogo} alt="" className="nav-logo" />
+        <Link to='/addproduct'><img src={navlogo} alt="" className="nav-logo" /></Link>
         <img src={navProfile} className='nav-profile' alt="" />
         {localStorage.getItem('auth-token')
         ? <button className='logout-button' onClick={() => { Logout()}}>Logout</button> 
