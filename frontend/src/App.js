@@ -16,16 +16,23 @@ import jeremybudimanunsplash from './Components/Assets/jeremy-budiman-unsplash.j
 import AdminAddProduct from './AdminComponents/AdminAddProduct/AdminAddProduct'
 import AdminListProduct from './AdminComponents/AdminListProduct/AdminListProduct'
 import AdminChatPage from './AdminComponents/AdminChatPage/AdminChatPage'
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import AdminNavBar from './AdminComponents/AdminNavbar/AdminNavbar';
 import { AuthenticationContext } from './Context/AuthenticationContext';
-import AdminSidebar from './AdminComponents/AdminSidebar/AdminSidebar';
+// import AdminSidebar from './AdminComponents/AdminSidebar/AdminSidebar';
 import './Pages/CSS/AdminPage.css'
 
 
 function App() {
 
-  const {isAdmin} = useContext(AuthenticationContext);
+  const { isAdmin } = useContext(AuthenticationContext);
+
+  useEffect(() => {
+    
+    if(isAdmin){
+      window.location.replace("/listproduct");
+    }
+  }, [])
 
   return (
     <div >

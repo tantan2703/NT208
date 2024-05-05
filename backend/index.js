@@ -171,19 +171,10 @@ app.post('/signup', async (req, res) => {
 
 // Admin signup
 app.get('/adminsignup', async (req, res) => {
-    if (isAdminExist) {
-        return res.json({success: false, message: "Admin already exists"});
-    }
-    let check = await User.findOne({ email: req.body.email });
+    let check = await User.findOne({ email: 'admin' });
     if (check) {
-        return res
-        .status(400)
-        .json(
-            {
-                success: false,
-                message: "Email already exists",
-            }
-        );
+        res.json({success: false, message: "Admin already exists"});
+        return;
     }
     let cart = {};
     cart["0"] = 0;
@@ -235,7 +226,7 @@ app.post('/login', async (req, res) => {
                     id: user.id,
                 }
             }
-            const token = req.body.email == 'admin'?jwt.sign(data, "admin"):jwt.sign(data, "secret_ecom");
+            const token = req.body.email === 'admin'?jwt.sign(data, "admin"):jwt.sign(data, "secret_ecom");
             let message = await Message.findOne({ user_id: user.id });
     
             if (!message) {
@@ -426,6 +417,7 @@ app.get('/getmessages', fetchUser, async (req, res) => {
 // Creating endpoint for getting all messages
 app.get('/admingetmessages', fetchAdmin, async (req, res) => {
     const message = await Message.find({});
+    console.log('All Messages Fetched');
     res.json(message);
 });
 
@@ -495,30 +487,36 @@ app.post('/changeinfo',async(req,res)=>{
   })
 
 // Authentication Middleware
-io.use( async (socket, next) => {
-    const token = socket.handshake.auth.token;
-    // Check for admin token bằng jwt
-    if (token == 'admin') {
-        return next();
-    }
-
-    if (!token) {
-        return next(new Error("Please authenticate using a valid token"));
-    }
-    try {
-        const data = jwt.verify(token, "secret_ecom");
-        socket.user = data.user;
-        socket.join(data.user.id);
-        console.log("User connected: ", data.user.id);
-        next();
-    } catch (error) {
-        return next(new Error("Please authenticate using a valid token"));
-    }
-});
+// io.use( async (socket, next) => {
+//     const token = socket.handshake.auth.token;
+//     if (!token) {
+//         return next(new Error("Please authenticate using a valid token"));
+//     }
+//     try {
+//         const data = jwt.verify(token, "secret_ecom");
+//         socket.user = data.user;
+//         socket.join(data.user.id);
+//         console.log("User connected: ", data.user.id);
+//         next();
+//     } catch (error) {
+//         return next(new Error("Please authenticate using a valid token"));
+//     }
+//     try {
+//         const deocode_admin = jwt.verify(token, "admin");
+//         socket.user = deocode_admin.user;
+//         console.log("Admin connected: ", deocode_admin.user.id);
+//         next();
+//     }
+//     catch (error) {
+//         return next(new Error("Please authenticate using a valid token"));
+//     }
+// });
 // Creating Websocket Server
 io.on('connection', async (socket) => {
+    console.log(socket.id);
     const token = socket.handshake.auth.token;
-    if (token == 'admin') {
+    try {
+        const decoded = jwt.verify(token, 'admin');
         // Get all users from database and join their rooms by their id
         const users = await User.find({email:{$ne:'admin'}});
         users.forEach(user => {
@@ -526,7 +524,9 @@ io.on('connection', async (socket) => {
             console.log("Admin connected to user: ", user._id);
         });
     }
-    console.log(socket.id);
+    catch (error) {
+        console.error('Error Admin connecting to the server:', error);
+    }
     
     // Hello from the server
     socket.emit('message', 'Hello from the server');
@@ -534,10 +534,7 @@ io.on('connection', async (socket) => {
     socket.on('message', (data) => {
         console.log(data);
     });
-    socket.on('join-room', (room, callback) => {
-        socket.join(room);
-        callback("Joined room: ", room);
-    });
+    
 
 
     // Admin add message with user id
@@ -556,12 +553,13 @@ io.on('connection', async (socket) => {
                         }
                     }
                 );
-                io.to(data.user_id).emit('getMessage');
+                io.emit('getMessage');
+                io.emit('adminGetMessage');
                 callback("Message sent");
-                console.log('Đã thêm tin nhắn thành công!');
+                console.log('Đã thêm tin nhắn admin thành công!');
             }
             catch (error) {
-                console.error('Lỗi khi thêm tin nhắn:', error);
+                console.error('Lỗi khi admin thêm tin nhắn:', error);
             }    
     });
 
@@ -570,14 +568,18 @@ io.on('connection', async (socket) => {
     socket.on('addMessage', async (data, callback) => {
         // Add message to database
         try {
-            let message = await Message.findOne({ user_id: socket.user.id });
+            // Giai mã token
+            const decoded = jwt.verify(data.user_id, 'secret_ecom');
+
+
+            let message = await Message.findOne({ user_id: decoded.user.id });
     
             if (!message) {
-                message = new Message({ user_id: socket.user.id, messages: [] });
+                message = new Message({ user_id: decoded.user.id, messages: [] });
                 await message.save();
             }
             await Message.updateOne(
-                { user_id: socket.user.id }, // Điều kiện tìm kiếm
+                { user_id: decoded.user.id }, // Điều kiện tìm kiếm
                 {
                     $push: {
                         messages: {
@@ -591,6 +593,7 @@ io.on('connection', async (socket) => {
             
             console.log('Đã thêm tin nhắn thành công!');
             callback("Message sent");
+            io.emit('adminGetMessage');
             io.emit('getMessage');
         } catch (error) {
             console.error('Lỗi khi thêm tin nhắn:', error);

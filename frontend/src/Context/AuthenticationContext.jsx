@@ -25,8 +25,14 @@ const AuthenticationContextProvider = (props) => {
                         }
                     });
             }
-            checkAdmin();
-    }, [authToken, reload]);
+            if (authToken) {
+                setIsLoggedIn(true);
+                checkAdmin();
+            }
+            else {
+                setIsLoggedIn(false);
+            }
+    }, [authToken]);
 
     return (
         <AuthenticationContext.Provider value={{ authToken, setAuthToken, isAdmin, setIsAdmin, reload, setReload, isLoggedIn, setIsLoggedIn }}>

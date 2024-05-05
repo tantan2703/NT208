@@ -13,13 +13,12 @@ root.render(
   <AuthenticationContextProvider>
     <ShopContextProvider>
       
-      <AdminMessageContextProvider>
+      
       <MessageContextProvider>
       <React.StrictMode>
       <App />
       </React.StrictMode>
       </MessageContextProvider>
-      </AdminMessageContextProvider>
       
     </ShopContextProvider>
     </AuthenticationContextProvider>

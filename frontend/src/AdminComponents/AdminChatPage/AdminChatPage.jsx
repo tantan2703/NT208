@@ -3,12 +3,14 @@ import './AdminChatPage.css'
 import AdminIcon from '../Assets/admin_icon.png'
 import {MainContainer, ChatContainer, MessageList, MessageInput, ConversationHeader, Avatar, Message, Sidebar, ConversationList, Conversation} from '@chatscope/chat-ui-kit-react'
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
-import { AdminMessageContext } from '../../Context/AdminMessageContext';
+import { MessageContext } from '../../Context/MessageContext';
 import '../../Pages/CSS/AdminPage.css'
 import AdminSidebar from '../AdminSidebar/AdminSidebar'
 
 const AdminChatPage = () => {
-    const {currentMessage, addMessage, allUsers, currentUserId, setCurrentUserId, currenUsername, setCurrentUsername} = useContext(AdminMessageContext);
+    const {currentMessage, adminAddMessage, allUsers, currentUserId, setCurrentUserId} = useContext(MessageContext);
+
+    const [currenUsername, setCurrentUsername] = useState('');
 
 const handleConversationClick = (e) => {
     setCurrentUserId(e._id)
@@ -23,7 +25,7 @@ useEffect(() => {
 function sendMessage(e){
     if (currentUserId && e){
         console.log(e);
-        addMessage(e, false, currentUserId);
+        adminAddMessage(e, false, currentUserId);
     }
 }
   return (

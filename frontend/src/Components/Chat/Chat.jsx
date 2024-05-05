@@ -11,7 +11,7 @@ const Chat = () => {
 
 function sendMessage(e){
     console.log(e);
-    addMessage(e, true, );
+    addMessage(e, true, localStorage.getItem('auth-token'));
 }
   return (
     <div className='chatPage-div'> 
