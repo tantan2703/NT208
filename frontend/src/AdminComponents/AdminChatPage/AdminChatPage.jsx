@@ -30,7 +30,7 @@ function sendMessage(e){
 }
   return (
     <div className='admin'>
-      <AdminSidebar/>
+      
     <div className='chatPage-div'> 
        <MainContainer>
         <Sidebar position='left'>

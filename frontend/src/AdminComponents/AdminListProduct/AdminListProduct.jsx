@@ -33,7 +33,7 @@ const AdminListProduct = () => {
 
   return (
     <div className='admin'>
-      <AdminSidebar/>
+      
     <div className='list-product'>
         <h1>
           All Products List

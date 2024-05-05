@@ -19,6 +19,7 @@ import AdminChatPage from './AdminComponents/AdminChatPage/AdminChatPage'
 import { useContext, useEffect } from 'react';
 import AdminNavBar from './AdminComponents/AdminNavbar/AdminNavbar';
 import { AuthenticationContext } from './Context/AuthenticationContext';
+import AdminSidebar from './AdminComponents/AdminSidebar/AdminSidebar';
 // import AdminSidebar from './AdminComponents/AdminSidebar/AdminSidebar';
 import './Pages/CSS/AdminPage.css'
 
@@ -38,6 +39,7 @@ function App() {
     <div >
       <BrowserRouter>
       {isAdmin?<AdminNavBar/>:<Navbar/>}
+      {isAdmin?<AdminSidebar/>:<></>}
       <Routes>
         <Route path='/addproduct' element={<AdminAddProduct/>} />
         <Route path='/listproduct' element={<AdminListProduct/>} />

@@ -84,7 +84,7 @@ const AdminAddProduct = () => {
     
   return (
     <div className='admin'>
-      <AdminSidebar/>
+     
     <div className='add-product'>
         <div className="addproduct-itemfield">
             <p>Watch name</p>

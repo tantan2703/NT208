@@ -1,11 +1,12 @@
 .sidebar{
     display: flex;
-    flex-direction: column;
+    padding: 50px 0px;
+    flex-direction: row;
     padding-top: 30px;
     gap: 20px;
     width: 100%;
-    max-width: 250px;
-    height: 100vh;
+    height: auto;
+    justify-content: center;
     background: white;
 }
 .sidebar-item{
