@@ -20,10 +20,11 @@ const AdminAddProduct = () => {
         name: '',
         price: 0,
         image: '',
-        brand: '',
+        brand: brandList[0],
         model: '',
         size: '',
         year: '',
+        sex: sexList[0],
     });
 
     const imageHandler = (e) => {
@@ -53,6 +54,8 @@ const AdminAddProduct = () => {
         if (responseData.success) 
         {
             product.image = responseData.image_url;
+
+            const image_filename = responseData.image_url.substring(responseData.image_url.lastIndexOf('/') + 1);
             console.log(product);
             await fetch('/addproduct', {
                 method: 'POST',
@@ -67,9 +70,14 @@ const AdminAddProduct = () => {
 
             // retrain model
             await fetch('/retrain', {
-                method: 'GET',
+                method: 'POST',
+                body: JSON.stringify({image_filename: image_filename}),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                }
             }).then((response) => response.json()).then((data) => {
-                console.log(data);
+                console.log(data.status);
             }).catch((err) => console.log(err));
         }
     }
@@ -112,8 +120,8 @@ const AdminAddProduct = () => {
             <p>Watch Sex</p>
             <select value={productDetail.sex} onChange={changHandler} name='sex' className='addproduct-selector'>
                 {
-                    sexList.map((brand, index) => {
-                        return <option key={index} value={brand}>{brand}</option>
+                    sexList.map((sex, index) => {
+                        return <option key={index} value={sex}>{sex}</option>
                     })
                 }
             </select>

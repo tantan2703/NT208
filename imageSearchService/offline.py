@@ -26,3 +26,25 @@ def train():
             np.save(feature_path, feature)
         except:
             continue
+
+def train_image(image_filename):
+
+    print(image_filename)
+
+    image_path = "backend/upload/images/" + image_filename
+
+    try:
+        fe = FeatureExtractor()
+        feature = fe.extract(img=Image.open(image_path))
+        feature_dir = Path("imageSearchService/static/feature")
+        feature_path = feature_dir / (image_filename.split('.')[0] + ".npy")
+        feature_dir.mkdir(parents=True, exist_ok=True)
+        np.save(feature_path, feature)
+        print("Train_image success")
+        return {"status": "success", "feature_path": feature_path}
+    
+    except:
+        print("Train_image fail")
+        return {"status": "fail"}
+if __name__ == "__main__":
+    train()

@@ -466,9 +466,20 @@ app.post('/imagesearch',imageSearchUpload.single('query_img'), async (req, res) 
 });
 
 // Midlleware for reatrain model
-app.get('/retrain', async (req, res) => {
+app.post('/retrain', async (req, res) => {
     try {
-        const response = await fetch('http://localhost:5001/retrain');
+        // Tao formData moi de gui den URL khac
+        let formData = new FormData();
+        console.log(req.body.image_filename);
+        formData.append('image_filename', req.body.image_filename);
+        // Gui formData den URL khac
+        const response = await fetch(
+            'http://localhost:5001/retrain',
+            {
+                method: 'POST',
+                body: formData,
+            }
+        );
         res.json(await response.json());
     } catch (err) {
         console.error(err);
