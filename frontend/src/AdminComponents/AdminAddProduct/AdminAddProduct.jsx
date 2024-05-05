@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
 import './AdminAddProduct.css'
 import upload_area from '../Assets/upload_area.svg'
+import AdminSidebar from '../AdminSidebar/AdminSidebar'
+
 
 const AdminAddProduct = () => {
 
@@ -73,6 +75,8 @@ const AdminAddProduct = () => {
     }
     
   return (
+    <div className='admin'>
+      <AdminSidebar/>
     <div className='add-product'>
         <div className="addproduct-itemfield">
             <p>Watch name</p>
@@ -121,6 +125,7 @@ const AdminAddProduct = () => {
             <input onChange={imageHandler} type="file" name='image' id='file-input' hidden/>
         </div>
         <button onClick={()=>{AddProduct()}} className="addproduct-btn">ADD</button>
+    </div>
     </div>
   )
 }

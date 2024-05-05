@@ -4,9 +4,11 @@ import AdminIcon from '../Assets/admin_icon.png'
 import {MainContainer, ChatContainer, MessageList, MessageInput, ConversationHeader, Avatar, Message, Sidebar, ConversationList, Conversation} from '@chatscope/chat-ui-kit-react'
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import { AdminMessageContext } from '../../Context/AdminMessageContext';
+import '../../Pages/CSS/AdminPage.css'
+import AdminSidebar from '../AdminSidebar/AdminSidebar'
 
 const AdminChatPage = () => {
-    const {currentMessage, addMessage, allUsers, currentUserId, setCurrentUserId, currenUsername, setCurrentUsername, setTest, test} = useContext(AdminMessageContext);
+    const {currentMessage, addMessage, allUsers, currentUserId, setCurrentUserId, currenUsername, setCurrentUsername} = useContext(AdminMessageContext);
 
 const handleConversationClick = (e) => {
     setCurrentUserId(e._id)
@@ -25,6 +27,8 @@ function sendMessage(e){
     }
 }
   return (
+    <div className='admin'>
+      <AdminSidebar/>
     <div className='chatPage-div'> 
        <MainContainer>
         <Sidebar position='left'>
@@ -69,6 +73,7 @@ function sendMessage(e){
             </MessageInput>
         </ChatContainer>
        </MainContainer>
+    </div>
     </div>
   )
 }

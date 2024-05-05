@@ -9,23 +9,24 @@ const AuthenticationContextProvider = (props) => {
     const [reload, setReload] = useState(false);
 
     useEffect(() => {
-        if (authToken) {
-            fetch('/isadmin', {
-                method: 'GET',
-                headers: {
-                    'auth-token': authToken,
-                },
-            }).then((response) => response.json())
-                .then((data) => {
-                    if (data.isAdmin) {
-                        setIsAdmin(true);
-                    }
-                    else {
-                        setIsAdmin(false);
-                    }
-                });
-        }
-    }, []);
+            async function checkAdmin() {
+                await fetch('/isadmin', {
+                    method: 'GET',
+                    headers: {
+                        'auth-token': authToken,
+                    },
+                }).then((response) => response.json())
+                    .then((data) => {
+                        if (data.isAdmin) {
+                            setIsAdmin(true);
+                        }
+                        else {
+                            setIsAdmin(false);
+                        }
+                    });
+            }
+            checkAdmin();
+    }, [authToken, reload]);
 
     return (
         <AuthenticationContext.Provider value={{ authToken, setAuthToken, isAdmin, setIsAdmin, reload, setReload, isLoggedIn, setIsLoggedIn }}>

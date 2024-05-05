@@ -31,8 +31,9 @@ const Login = () => {
     if(responseData.success) {
       localStorage.setItem('auth-token', responseData.token);
       setAuthToken(responseData.token);
+      
       if (responseData.admin) {
-        window.location.replace("/admin");
+        window.location.replace("/listproduct");
         setIsAdmin(true);
       }
       else {

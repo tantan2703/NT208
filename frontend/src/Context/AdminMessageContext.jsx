@@ -1,31 +1,43 @@
-import React, { createContext, useState, useEffect } from 'react'
+import React, { createContext, useState, useEffect, useContext } from 'react'
 import io from 'socket.io-client';
+import { AuthenticationContext } from './AuthenticationContext';
 
 
 export const AdminMessageContext = createContext(null);
 
 const AdminMessageContextProvider = (props) => {
+    const {isAdmin} = useContext(AuthenticationContext);
+
     const [allMessages, setAllMessages] = useState([]);
     const [currentMessage, setCurrentMessage] = useState({messages: []});
     const [allUsers, setAllUsers] = useState([]);
     const [currentUserId, setCurrentUserId] = useState(null);
     const [currenUsername, setCurrentUsername] = useState('');
-    const [socket, setNewSocket] = useState(io('/socket.io',
+    const [socket, setNewSocket] = useState(io.connect('/',
     {
         auth: {
-            token: 'admin',
+            token: "admin",
+            
         },
     }));
     const [reload, setReload] = useState(false);
 
     useEffect(() => {
-        setNewSocket(io('/socket.io',
-        {
-            auth: {
-                token: 'admin',
-            },
-        }));
-
+        async function getUsers() {
+            try {
+                await fetch('/allusers',{
+                            method:'GET',
+                            headers:{
+                            'auth-token':`${localStorage.getItem('auth-token')}`,
+                            },
+                        }).then((response)=>response.json())
+                        .then((data)=>setAllUsers(data));
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+            // Get all users from database
+            getUsers();
         socket.on('connect', () => {
 
             console.log('Connected to server');
@@ -42,19 +54,10 @@ const AdminMessageContextProvider = (props) => {
             }).then((response)=>response.json())
             .then((data)=>setAllMessages(data));
         });
-        // Get all users from database
-        try {
-            fetch('/allusers',{
-                        method:'GET',
-                    }).then((response)=>response.json())
-                    .then((data)=>setAllUsers(data));
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
         return () => {
             socket.disconnect();
-        }
-    }, []);
+        } 
+    }, [socket]);
 
     useEffect(() => {
         if (currentUserId){
@@ -63,16 +66,21 @@ const AdminMessageContextProvider = (props) => {
         console.log('currentMessage: ', currentMessage);
     }, [currentUserId, allMessages]);
 
-    useEffect(() => {
-        fetch('/admingetmessages',{
-            method:'GET',
-        }).then((response)=>response.json())
-        .then((data)=>setAllMessages(data));
+    useEffect(() => { 
+        if(localStorage.getItem('auth-token')) 
+            {fetch('/admingetmessages',{
+                method:'GET',
+                headers:{
+                    'auth-token':`${localStorage.getItem('auth-token')}`,
+                    },
+            }).then((response)=>response.json())
+            .then((data)=>setAllMessages(data));}
     }, [reload]);
 
     
 
     const addMessage = (message, myMessage, currentUserId) => {
+        
         console.log(message);
         // Add message to database
         socket.emit('adminAddMessage', {content: message, userMessage: myMessage, user_id: currentUserId}, (data) => {

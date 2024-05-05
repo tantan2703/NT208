@@ -10,7 +10,6 @@ const server = http.createServer(app);
 const io = require('socket.io')(server, {
     cors: {
         origin : '*',
-        socket: ['websocket'],
     }
 });
 const cors = require('cors');
@@ -119,13 +118,7 @@ app.post('/removeproduct', async (req, res) => {
 }
 );
 
-// Get All Products API
-app.get('/allproducts', async (req, res) => {
-    const products = await Product.find({});
-    res.json(products);
-    console.log("All Products Fetched");
-}
-);
+
 
 // Creating API for User Authentication
 // Creating Endpoint for registering a user
@@ -287,9 +280,41 @@ app.post('/login', async (req, res) => {
         
 });
 
+// Creating middleware for admin authentication
+const fetchAdmin = async (req, res, next) => {
+    const token = req.header("auth-token");
+    if (!token) {
+        res.send({
+            isAdmin: false,
+            errors: "Please authenticate using a valid token",
+        });
+    }
+    else
+        try {
+            const data = jwt.verify(token, "admin");
+            req.user = data.user;
+            next();
+        } catch (error) {
+            res.send({
+                isAdmin: false,
+                errors: "Please authenticate using a valid token",
+            });
+        }
+}
+
+// Get All Products API
+app.get('/allproducts', async (req, res) => {
+    const products = await Product.find({});
+    res.json(products);
+    console.log("All Products Fetched");
+}
+);
+
 // Creating endpoint for getting all users data
-app.get('/allusers', async (req, res) => {
-    const users = await User.find({});
+app.get('/allusers', fetchAdmin, async (req, res) => {
+    // Fetch all users from database except admin
+    let users
+    users = await User.find({email:{$ne:'admin'}});
     res.json(users);
     console.log(users);
     console.log("All Users Fetched");
@@ -335,27 +360,6 @@ const fetchUser = async (req, res, next) => {
         }
 }
 
-// Creating middleware for admin authentication
-const fetchAdmin = async (req, res, next) => {
-    const token = req.header("auth-token");
-    if (!token) {
-        res.send({
-            isAdmin: false,
-            errors: "Please authenticate using a valid token",
-        });
-    }
-    else
-        try {
-            const data = jwt.verify(token, "admin");
-            req.user = data.user;
-            next();
-        } catch (error) {
-            res.send({
-                isAdmin: false,
-                errors: "Please authenticate using a valid token",
-            });
-        }
-}
 
 app.get('/isadmin', fetchAdmin, async (req, res) => {
     res.json({isAdmin: true});
@@ -402,7 +406,7 @@ app.post('/getcart', fetchUser, async (req, res) => {
 });
 
 // Creating endpoint for user profile
-app.post('/getinfo',fetchUser,async(req,res)=>{
+app.post('/getinfo', fetchUser,async(req,res)=>{
     let user = await User.findOne({_id:req.user.id});
     res.json(user);
   })
@@ -420,7 +424,7 @@ app.get('/getmessages', fetchUser, async (req, res) => {
 });
 
 // Creating endpoint for getting all messages
-app.get('/admingetmessages', async (req, res) => {
+app.get('/admingetmessages', fetchAdmin, async (req, res) => {
     const message = await Message.find({});
     res.json(message);
 });
@@ -493,9 +497,11 @@ app.post('/changeinfo',async(req,res)=>{
 // Authentication Middleware
 io.use( async (socket, next) => {
     const token = socket.handshake.auth.token;
-    if (token === 'admin') {
+    // Check for admin token bằng jwt
+    if (token == 'admin') {
         return next();
     }
+
     if (!token) {
         return next(new Error("Please authenticate using a valid token"));
     }
@@ -512,9 +518,9 @@ io.use( async (socket, next) => {
 // Creating Websocket Server
 io.on('connection', async (socket) => {
     const token = socket.handshake.auth.token;
-    if (token === 'admin') {
+    if (token == 'admin') {
         // Get all users from database and join their rooms by their id
-        const users = await User.find({});
+        const users = await User.find({email:{$ne:'admin'}});
         users.forEach(user => {
             socket.join(user._id);
             console.log("Admin connected to user: ", user._id);
@@ -552,6 +558,7 @@ io.on('connection', async (socket) => {
                 );
                 io.to(data.user_id).emit('getMessage');
                 callback("Message sent");
+                console.log('Đã thêm tin nhắn thành công!');
             }
             catch (error) {
                 console.error('Lỗi khi thêm tin nhắn:', error);

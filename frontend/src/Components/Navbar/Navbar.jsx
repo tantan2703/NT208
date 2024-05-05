@@ -11,7 +11,7 @@ import { AuthenticationContext } from '../../Context/AuthenticationContext'
 
 const Navbar = () => {
 
-  const {setAuthToken} = useContext(AuthenticationContext);
+  const {setAuthToken, setIsAdmin} = useContext(AuthenticationContext);
   
   const [menu,setMenu] = useState("shop");
   const {getTotalCartItems} = useContext(ShopContext);
@@ -34,7 +34,7 @@ const Navbar = () => {
       </div>
       <div className="nav-login-cart">
       {localStorage.getItem('auth-token')
-        ? <button onClick={()=>{setAuthToken(null);localStorage.removeItem('auth-token');window.location.replace("/")}}>Logout</button> 
+        ? <button onClick={()=>{setIsAdmin(false);setAuthToken(null);localStorage.removeItem('auth-token');window.location.replace("/")}}>Logout</button> 
       :<Link to='/login'><button>Login</button></Link>}
         <Link to='/profile/overview'><img src={user_icon} alt="" className='user_icon'/></Link>
         <Link to='/cart'><img src={cart_icon} alt="" className='cart_icon'/></Link>

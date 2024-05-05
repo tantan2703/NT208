@@ -13,13 +13,14 @@ import Login from './Components/LoginSignup/Login';
 import Signup from './Components/LoginSignup/Signup';
 import UserProfile from './Pages/UserProfile';
 import jeremybudimanunsplash from './Components/Assets/jeremy-budiman-unsplash.jpg'
-import AdminPage from './Pages/AdminPage';
 import AdminAddProduct from './AdminComponents/AdminAddProduct/AdminAddProduct'
 import AdminListProduct from './AdminComponents/AdminListProduct/AdminListProduct'
 import AdminChatPage from './AdminComponents/AdminChatPage/AdminChatPage'
 import { useContext } from 'react';
 import AdminNavBar from './AdminComponents/AdminNavbar/AdminNavbar';
 import { AuthenticationContext } from './Context/AuthenticationContext';
+import AdminSidebar from './AdminComponents/AdminSidebar/AdminSidebar';
+import './Pages/CSS/AdminPage.css'
 
 
 function App() {
@@ -35,7 +36,8 @@ function App() {
         <Route path='/listproduct' element={<AdminListProduct/>} />
         <Route path='/adminchatpage' element={<AdminChatPage/>} />
         <Route path='/' element={<Shop/>}/>
-        <Route path='/admin' element={<AdminPage/>}/>
+        {/* <Route path='/admin' element={<AdminPage/>}/> */}
+        
         <Route path='/watches' element={<SearchProductPage banner={jeremybudimanunsplash} />}/>
         <Route path='/womens' element={<SearchProductPage banner={women_banner} />}/>
         <Route path='/kids' element={<SearchProductPage banner={kids_banner} />}/>

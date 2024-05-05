@@ -7,10 +7,11 @@ import { AuthenticationContext } from '../../Context/AuthenticationContext'
 
 const AdminNavbar = () => {
 
-  const {setAuthToken} = React.useContext(AuthenticationContext);
+  const {setAuthToken, setIsAdmin} = React.useContext(AuthenticationContext);
 
   const Logout = () => {
     setAuthToken(null);
+    setIsAdmin(false);
     localStorage.removeItem('auth-token');
     window.location.replace("/");
   }

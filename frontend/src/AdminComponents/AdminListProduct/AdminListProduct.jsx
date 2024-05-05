@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import './AdminListProduct.css'
 import cross_icon from '../Assets/cross_icon.png'
+import AdminSidebar from '../AdminSidebar/AdminSidebar'
+import '../../Pages/CSS/AdminPage.css'
 
 const AdminListProduct = () => {
 
@@ -30,6 +32,8 @@ const AdminListProduct = () => {
   }
 
   return (
+    <div className='admin'>
+      <AdminSidebar/>
     <div className='list-product'>
         <h1>
           All Products List
@@ -51,6 +55,7 @@ const AdminListProduct = () => {
           </div>
           })}
         </div>
+    </div>
     </div>
   )
 }
