@@ -1,4 +1,4 @@
-.navbar{
+.admin-navbar{
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -7,10 +7,10 @@
     background-color: #fff; 
     margin-bottom: 1px;
 }
-.nav-logo{
+.admin-nav-logo{
     width: 200px;
 }
-.nav-profile{
+.admin-nav-profile{
     width: 75px;
 }
 
@@ -27,13 +27,13 @@
     cursor: pointer;
 }
 @media(max-width: 800px){
-    .navbar{
+    .admin-navbar{
         padding: 15px 30px;
     }
-    .nav-logo{
+    .admin-nav-logo{
         width: 150px;
     }
-    .nav-profile{
+    .admin-nav-profile{
         width: 60px;
     }
 }

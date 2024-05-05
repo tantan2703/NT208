@@ -7,7 +7,7 @@
     width: 100%;
     height: auto;
     justify-content: center;
-    background: white;
+    background: #000;
 }
 .sidebar-item{
     display: flex;

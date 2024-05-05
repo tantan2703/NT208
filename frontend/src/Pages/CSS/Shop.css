@@ -1,0 +1,7 @@
+.slideshow {
+    margin-right: 100px;
+    flex: 0 0 auto;
+    width: 30%;
+    margin-left: auto;
+    background: #000;
+}

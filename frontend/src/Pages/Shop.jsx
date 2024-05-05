@@ -5,14 +5,13 @@ import Offers from '../Components/Offers/Offers'
 import NewCollections from '../Components/NewCollections/NewCollections'
 import NewsLetter from '../Components/NewsLetter/NewsLetter'
 import SlideShow from '../Components/SlideShow/SlideShow'
+import './CSS/Shop.css'
 
 const Shop = () => {
   return (
-    <div>
+    <div style={{background:"black"}} >
       <Hero/>
-      <Popular/>
-      <Offers/>
-      <SlideShow/>
+      <div className='slideshow'><SlideShow/></div>
       <NewCollections/>
       <NewsLetter/>
     </div>

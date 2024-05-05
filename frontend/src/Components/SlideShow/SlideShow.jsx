@@ -1,6 +1,7 @@
 import React from 'react'
 import 'react-slideshow-image/dist/styles.css'
 import { Slide } from 'react-slideshow-image';
+import './SlideShow.css'
 
 const spanStyle = {
     padding: '20px',
@@ -9,11 +10,13 @@ const spanStyle = {
   }
   
   const divStyle = {
+    width: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundSize: 'cover',
     height: '400px'
+
   }
   const slideImages = [
     {
@@ -32,7 +35,7 @@ const spanStyle = {
 const SlideShow = () => {
   return (
     <div className="slide-container">
-        <Slide>
+        <Slide autoplay={true} duration={2500} transitionDuration={1000} infinite={true}>
          {slideImages.map((slideImage, index)=> (
             <div key={index}>
               <div style={{ ...divStyle, 'backgroundImage': `url(${slideImage.url})` }}>
