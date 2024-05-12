@@ -102,7 +102,18 @@ const ShopContextProvider = (props) => {
         return totalItem;
     }
 
-    const contextValue = {User, getTotalCartItems, getTotalCartAmount, all_product, cartItems, addToCart, removeFromCart}
+    const searchProduct = (search) => {
+        let searchResult = [];
+        all_product.forEach((product)=>{
+            if(product.name.toLowerCase().includes(search.toLowerCase()))
+            {
+                searchResult.push(product);
+            }
+        })
+        return searchResult;
+    }
+
+    const contextValue = {User, getTotalCartItems, getTotalCartAmount, all_product, cartItems, addToCart, removeFromCart, searchProduct}
     return(
         <ShopContext.Provider value={contextValue}>
             {props.children}

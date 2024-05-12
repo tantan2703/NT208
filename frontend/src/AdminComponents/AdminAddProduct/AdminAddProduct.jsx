@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import './AdminAddProduct.css'
 import upload_area from '../Assets/upload_area.svg'
-import AdminSidebar from '../AdminSidebar/AdminSidebar'
+
 
 
 const AdminAddProduct = () => {

@@ -14,11 +14,26 @@ import SingleBanner from '../Banners/Banner'
 import banner_img from '../Assets/jeremy-budiman-unsplash.jpg'
 
 const HomePage = (props) => {
+  const [search, setSearch] = useState('');
+
   const {all_product} = useContext(ShopContext);
 
   const [image, setImage] = useState(null);
 
 const [viewProductIds, setViewProductIds] = useState([]);
+
+  const searchHandler = (e) => {
+    setSearch(e.target.value);
+  }
+
+  useEffect(() => {
+    if (search === '') {
+      setViewProductIds(all_product.map((val) => val.id));
+    } else {
+      setViewProductIds(all_product.filter((val) => val.name.toLowerCase().includes(search.toLowerCase())).map((val) => val.id));
+    }
+  }
+  , [search]);
 
   const imageHandler = async (e) => {
   let formData = new FormData();
@@ -44,12 +59,12 @@ useEffect(()=>{
   // const menuItems = [... new Set(all_product.map((val) => val.category))];
   return (
     <div className='shop-category'>
-      <SingleBanner heading='Product' bannerimage={banner_img}/> 
+      {/* <SingleBanner heading='Product' bannerimage={banner_img}/>  */}
       {/* <SearchBar/> */}
       <div className="search">
       <div className="searchInputs">
         <input
-          type="text" placeholder='Search for watches'
+          type="text" placeholder='Search for watches' onChange={searchHandler} 
         />
         <button className="search-button">
             <img src={iconsearch} alt="Search" />
