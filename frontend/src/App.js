@@ -7,12 +7,9 @@ import Shop from './Pages/Shop';
 import Cart from './Pages/Cart';
 import ChatPage from './Pages/ChatPage';
 import Footer from './Components/Footer/Footer';
-import women_banner from './Components/Assets/banner_women.png'
-import kids_banner from './Components/Assets/banner_kids.png'
 import Login from './Components/LoginSignup/Login';
 import Signup from './Components/LoginSignup/Signup';
 import UserProfile from './Pages/UserProfile';
-import jeremybudimanunsplash from './Components/Assets/jeremy-budiman-unsplash.jpg'
 import AdminAddProduct from './AdminComponents/AdminAddProduct/AdminAddProduct'
 import AdminListProduct from './AdminComponents/AdminListProduct/AdminListProduct'
 import AdminChatPage from './AdminComponents/AdminChatPage/AdminChatPage'
@@ -22,6 +19,8 @@ import { AuthenticationContext } from './Context/AuthenticationContext';
 import AdminSidebar from './AdminComponents/AdminSidebar/AdminSidebar';
 // import AdminSidebar from './AdminComponents/AdminSidebar/AdminSidebar';
 import './Pages/CSS/AdminPage.css'
+import CheckoutPage from './Components/Checkout/CheckoutPage';
+import OrderPage from './Components/OrderPage/OrderPage';
 
 
 function App() {
@@ -47,9 +46,9 @@ function App() {
         <Route path='/' element={<Shop/>}/>
         {/* <Route path='/admin' element={<AdminPage/>}/> */}
         
-        <Route path='/watches' element={<SearchProductPage banner={jeremybudimanunsplash} />}/>
-        <Route path='/womens' element={<SearchProductPage banner={women_banner} />}/>
-        <Route path='/kids' element={<SearchProductPage banner={kids_banner} />}/>
+        <Route path='/watches' element={<SearchProductPage/>}/>
+        <Route path='/womens' element={<SearchProductPage />}/>
+        <Route path='/kids' element={<SearchProductPage />}/>
         <Route path='product'>
           <Route path=':productId' element={<Product/>}/>
         </Route>
@@ -58,6 +57,8 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/profile/:activepage' element={<UserProfile/>}/>
+        <Route path='/checkout' element={<CheckoutPage/>} />
+        <Route path='/orderpage' element={<OrderPage/>} />
       </Routes>
       <Footer/>
       </BrowserRouter>
