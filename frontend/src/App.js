@@ -20,6 +20,8 @@ import { useContext, useEffect } from "react";
 import AdminNavBar from "./AdminComponents/AdminNavbar/AdminNavbar";
 import { AuthenticationContext } from "./Context/AuthenticationContext";
 import AdminSidebar from "./AdminComponents/AdminSidebar/AdminSidebar";
+import OrderPage from "./Components/OrderPage/OrderPage";
+import CheckoutPage from "./Components/Checkout/CheckoutPage";
 // import AdminSidebar from './AdminComponents/AdminSidebar/AdminSidebar';
 import "./Pages/CSS/AdminPage.css";
 
@@ -64,6 +66,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/profile/:activepage" element={<UserProfile />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/orderpage" element={<OrderPage />} />
         </Routes>
         <Footer />
       </BrowserRouter>
