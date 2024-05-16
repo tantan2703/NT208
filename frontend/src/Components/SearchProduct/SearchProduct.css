@@ -14,3 +14,12 @@
     gap: 20px;
     padding: auto;
 }
+
+.filter_price{
+    width: 118px;
+    height: 60%;
+    border: 1px solid black;
+    justify-content: center;
+    align-items: center;
+    margin-left: 170px;
+}
