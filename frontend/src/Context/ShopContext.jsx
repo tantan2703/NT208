@@ -7,6 +7,8 @@ const ShopContextProvider = (props) => {
     const [User,setUser] = useState({});
     const [all_product,setAll_Product] = useState([]);
     const [cartItems, setCartItems] = useState({"0": 0});
+    const [totalCartAmount, setTotalCartAmount] = useState(0);
+    const [orderList, setOrderList] = useState([]);
 
     useEffect(()=>{
         fetch('/allproducts')
@@ -34,11 +36,22 @@ const ShopContextProvider = (props) => {
                 },
             }).then((response)=>response.json())
             .then((data)=>setUser(data));
+
+            fetch('/getorder',{
+                method:'POST',
+                headers:{
+                    Accept:'application/form-data',
+                    'auth-token':`${localStorage.getItem('auth-token')}`,
+                    'Content-Type':'application/json',
+                },
+            }).then((response)=>response.json())
+            .then((data)=>setOrderList(data));
         }
-
-        
-
     },[])
+
+    useEffect(()=>{
+        setTotalCartAmount(getTotalCartAmount());
+    },[cartItems])
    
     const addToCart = (itemId) => {
         setCartItems((prev) => ({...prev, [itemId]: itemId in prev ? prev[itemId] + 1 : 1}));
@@ -102,6 +115,15 @@ const ShopContextProvider = (props) => {
         return totalItem;
     }
 
+    const getTotalOrderItems = () => {
+        let totalItem = 0;
+        for(const item in orderList)
+        {
+            totalItem += 1;
+        }
+        return totalItem;
+    }
+
     const searchProduct = (search) => {
         let searchResult = [];
         all_product.forEach((product)=>{
@@ -113,7 +135,7 @@ const ShopContextProvider = (props) => {
         return searchResult;
     }
 
-    const contextValue = {User, getTotalCartItems, getTotalCartAmount, all_product, cartItems, addToCart, removeFromCart, searchProduct}
+    const contextValue = {User, getTotalCartItems, getTotalCartAmount, all_product, cartItems, addToCart, removeFromCart, searchProduct, totalCartAmount, orderList, getTotalOrderItems}
     return(
         <ShopContext.Provider value={contextValue}>
             {props.children}

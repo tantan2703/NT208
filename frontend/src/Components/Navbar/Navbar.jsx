@@ -3,6 +3,7 @@ import './Navbar.css'
 import logo from '../Assets/logo.png'
 import cart_icon from '../Assets/cart_icon.png'
 import chat_icon from '../Assets/chat_icon.png'
+import order_icon from '../Assets/order_icon.png'
 import { Link } from 'react-router-dom'
 import { ShopContext } from '../../Context/ShopContext'
 import user_icon from '../Assets/avatar.png'
@@ -14,7 +15,7 @@ const Navbar = () => {
   const {setAuthToken, setIsAdmin} = useContext(AuthenticationContext);
   
   const [menu,setMenu] = useState("shop");
-  const {getTotalCartItems} = useContext(ShopContext);
+  const {getTotalCartItems, getTotalOrderItems} = useContext(ShopContext);
   const menuRef = useRef();
 
   const dropdown_toggle = (e) =>{
@@ -40,6 +41,8 @@ const Navbar = () => {
         <Link to='/cart'><img src={cart_icon} alt="" className='cart_icon'/></Link>
         <div className="nav-cart-count">{getTotalCartItems()}</div>
         <Link to='/chatpage'><img className='chat-icon' src={chat_icon} alt="" /></Link>
+        <Link to='/orderpage'><img className='order-icon' src={order_icon} alt="" /></Link>
+        <div className="nav-cart-count">{getTotalOrderItems()}</div>
       </div>
     </div>
   )

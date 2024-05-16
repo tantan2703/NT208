@@ -4,6 +4,11 @@ import { ShopContext } from '../../Context/ShopContext'
 import CartItemUnit from './CartItemUnit'
 
 const CartItems = () => {
+    // Chuyển hướng đến trang checkout
+    const handleCheckout = () => {
+        window.location.href = '/checkout';
+    }
+
     const {getTotalCartAmount, all_product, cartItems} = useContext(ShopContext);
   return (
     <div className='cartitems'>
@@ -44,7 +49,7 @@ const CartItems = () => {
                 <h3>${getTotalCartAmount()}</h3>
               </div>
             </div>
-            <button>PROCEED TO CHECKOUT</button>
+            <button onClick={handleCheckout} >PROCEED TO CHECKOUT</button>
         </div>
         <div className="cartitems-promocode">
           <p>If you have a promo code, Enter it here</p>

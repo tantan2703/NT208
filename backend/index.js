@@ -21,6 +21,7 @@ const uuid = require("uuid");
 const Product = require('./models/Product');
 const User = require('./models/User');
 const Message = require('./models/Message');
+const Order = require('./models/Order');
 
 
 app.use(express.json());
@@ -135,13 +136,16 @@ app.post('/signup', async (req, res) => {
         );
     }
     let cart = {};
+    let order = [];
     cart["0"] = 0;
+    order.push("0");
     const user = new User(
         {
             username: req.body.username,
             email: req.body.email,
             password: req.body.password,
             cartData: cart,
+            orderData: order,
         }
     );
 
@@ -177,13 +181,16 @@ app.get('/adminsignup', async (req, res) => {
         return;
     }
     let cart = {};
+    let order = [];
     cart["0"] = 0;
+    order.push("0");
     const user = new User(
         {
             username: 'admin',
             email: 'admin',
             password: 'admin',
             cartData: cart,
+            orderData: order,
         }
     );
 
@@ -487,7 +494,7 @@ app.post('/retrain', async (req, res) => {
     }
 });
 
-app.post('/changeinfo',async(req,res)=>{
+app.post('/changeinfo', async(req,res)=>{
     let user = await User.findOne({email:req.body.email});
     user.name = req.body.username;
     user.email = req.body.email;
@@ -496,6 +503,51 @@ app.post('/changeinfo',async(req,res)=>{
     res.json({success:true,alert:"User Info Updated"});
     //res.json({success:false,errors:"Wrong Email Id"})
   })
+
+
+  // Creating endpoint for user to order products
+app.post('/order', fetchUser, async (req, res) => {
+    let userData = await User.findOne({ _id: req.user.id });
+    let order = new Order(
+        {
+            id: generateID(),
+            user_id: req.user.id,
+            products: req.body.products,
+            total: req.body.total,
+            fullname: req.body.fullname,
+            email: req.body.email,
+            phone: req.body.phone,
+            address: req.body.address,
+            province: req.body.province,
+            city: req.body.city,
+            ward: req.body.ward,
+            time: req.body.time,
+            status: "Pending",
+        }
+    );
+    await order.save();
+    userData.orderData.push(order._id);
+    userData.cartData = {"0": 0};
+    await User
+    .findOneAndUpdate(
+        { _id: req.user.id }, 
+        { cartData: userData.cartData},
+    );
+    await User
+    .findOneAndUpdate(
+        { _id: req.user.id }, 
+        { orderData: userData.orderData},
+    );
+    res.json({success: true, message: "Order Placed Successfully"});
+}
+);
+
+// Creating endpoint for getting order by user id
+app.post('/getorder', fetchUser, async (req, res) => {
+    let order = await Order.find({ user_id: req.user.id });
+    res.json(order);
+});
+
 
 // Authentication Middleware
 // io.use( async (socket, next) => {

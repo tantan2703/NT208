@@ -41,7 +41,6 @@ const AdminListProduct = () => {
         <div className="listproduct-allproduct">
           <hr />
           {allProducts.map((product, index) => {
-            console.log(product.image);
             return <div key={index} className="listproduct-format-main listproduct-format">
             <img src={`${product.image}`} alt="" className="listproduct-product-icon" />
             <p>{product.name}</p>
