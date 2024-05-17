@@ -17,22 +17,26 @@ const OrderPage = () => {
         },
       };
 
-  const {orderList} = useContext(ShopContext);
+  const {orderList, all_product} = useContext(ShopContext);
+
+  const [viewOrderProduct, setViewOrderProduct] = useState({'loong': 1});
 
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const handleOpenModal = () => {
+  const handleOpenModal = (orderProducts) => {
+    if (orderProducts) {
+      setViewOrderProduct(orderProducts);
+    }
     setModalOpen(true);
   };
+
+  useEffect(() => {
+    console.log("viewOrderProduct", viewOrderProduct);
+  }, [viewOrderProduct]);
 
   const handleCloseModal = () => {
     setModalOpen(false);
   };
-
-
-  const ViewOrder = async (products)=> {
-    // View order products bằng popover
-  }
 
   function ProductListModal({ orders, isOpen, onRequestClose }) {
     return (
@@ -41,13 +45,23 @@ const OrderPage = () => {
         style={customStyles}
         onRequestClose={onRequestClose}
         contentLabel="Product List Modal"
+        
       >
         <h2>Product List</h2>
-        <ul>
-          {orders.map((order, index) => (
-            <li key={index}>{order._id}</li>
-          ))}
-        </ul>
+        
+            {all_product.map((product, i) => {       
+              if (product.id in orders) {
+                return <div key={i} className="listproduct-format-main listproduct-format">
+                <img src={`${product.image}`} alt="" className="listproduct-product-icon" />
+                <p>{product.name}</p>
+                <p>${product.price}</p>
+                <p>{orders[product.id]}</p>
+              </div>
+              }
+              else {
+                return null;
+              }
+            })}
         <button onClick={onRequestClose}>Close</button>
       </Modal>
     );
@@ -69,13 +83,13 @@ const OrderPage = () => {
             <p>{order.time}</p>
             <p>{order.status}</p>
             <p>{order.total}</p>
-            <Button onClick={handleOpenModal}>View</Button>
+            <Button onClick={()=>handleOpenModal(order.products)}>View</Button>
           </div>
           })}
         </div>
     </div>
     <ProductListModal
-        orders={orderList}
+        orders={viewOrderProduct}
         isOpen={isModalOpen}
         onRequestClose={handleCloseModal}
       />
