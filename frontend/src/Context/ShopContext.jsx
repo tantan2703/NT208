@@ -6,7 +6,7 @@ export const ShopContext = createContext(null);
 const ShopContextProvider = (props) => {
     const [User,setUser] = useState({});
     const [all_product,setAll_Product] = useState([]);
-    const [cartItems, setCartItems] = useState({"0": 0});
+    const [cartItems, setCartItems] = useState([]);
     const [totalCartAmount, setTotalCartAmount] = useState(0);
     const [orderList, setOrderList] = useState([]);
 
@@ -50,7 +50,11 @@ const ShopContextProvider = (props) => {
     },[])
 
     useEffect(()=>{
-        setTotalCartAmount(getTotalCartAmount());
+        if (cartItems.length === 0) {
+            setTotalCartAmount(0);
+        } else {
+            setTotalCartAmount(getTotalCartAmount());
+        }
     },[cartItems])
    
     const addToCart = (itemId) => {
@@ -97,10 +101,13 @@ const ShopContextProvider = (props) => {
         let totalAmout = 0;
         for (const item in cartItems)
         {
-            if(cartItems[item]>0)
+            if(cartItems[item] > 0 )
             {
                 let itemInfo = all_product.find((product)=>product.id === item);
-                totalAmout += itemInfo.price * cartItems[item];
+                if (itemInfo)
+                {
+                    totalAmout += itemInfo.price * cartItems[item];
+                }
             }
         }
         return totalAmout;

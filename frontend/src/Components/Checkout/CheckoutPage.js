@@ -7,7 +7,7 @@ import CartItemUnit from '../CartItems/CartItemUnit';
 
 const CheckoutPage = () => {
 
-    const {totalCartAmount, all_product, cartItems} = useContext(ShopContext);
+    const {all_product, cartItems, totalCartAmount} = useContext(ShopContext);
 
     const provinceList = Object.keys(VietnamData);
 
@@ -29,7 +29,6 @@ const CheckoutPage = () => {
         total: totalCartAmount,
         products: cartItems,
     });
-
 
     const changHandler = (e) => { 
         setOrderDetail({...orderDetail, [e.target.name]: e.target.value});
@@ -60,6 +59,12 @@ const CheckoutPage = () => {
     }, [orderDetail])
 
     const AddOrder = async () => {
+        // Alert if no product in cart
+        if(Object.keys(cartItems).length === 1){
+            alert('No product in cart');
+            return;
+        }
+
         let order = orderDetail;
 
         // check if all fields are filled
