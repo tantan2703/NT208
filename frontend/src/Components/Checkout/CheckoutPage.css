@@ -1,6 +1,6 @@
 .checkout{
     display: flex;
-    flex-direction: column;
+    flex-direction: row-reverse;
     align-items: center;
     height: 100vh;
     background-color: #f5f5f5;
