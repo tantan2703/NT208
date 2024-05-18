@@ -72,7 +72,7 @@ const OrderPage = () => {
       
     <div className='list-product'>
         <h1>
-          All Products List
+          All Orders List
         </h1>
         <div className="listproduct-allproduct">
           <hr />

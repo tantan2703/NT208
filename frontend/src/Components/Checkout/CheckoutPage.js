@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react'
-import './CheckoutPage.css'
+import './CheckoutPage.css';
 import VietnamData from './ProvinceList';
 import { ShopContext } from '../../Context/ShopContext';
 import CartItemUnit from '../CartItems/CartItemUnit';
@@ -74,7 +74,9 @@ const CheckoutPage = () => {
                 return;
             }
         }
-         
+
+        setOrderDetail({...orderDetail, total: totalCartAmount});
+
         await fetch('/order', {
             method: 'POST',
             headers:{

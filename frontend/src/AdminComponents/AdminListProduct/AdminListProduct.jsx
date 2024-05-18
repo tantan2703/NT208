@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import './AdminListProduct.css'
 import cross_icon from '../Assets/cross_icon.png'
-import AdminSidebar from '../AdminSidebar/AdminSidebar'
+import { MdModeEdit } from "react-icons/md";
 import '../../Pages/CSS/AdminPage.css'
+import { Link } from 'react-router-dom'
 
 const AdminListProduct = () => {
 
@@ -51,6 +52,7 @@ const AdminListProduct = () => {
             <p>{product.sex}</p>
             <p>{product.year}</p>
             <img onClick={()=>{remove_product(product.id)}} src={cross_icon} alt="" className="listproduct-remove-icon" />
+            <Link to={`/updateproduct/${product.id}`}><MdModeEdit/></Link>
           </div>
           })}
         </div>
