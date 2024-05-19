@@ -1,12 +1,15 @@
 import React from 'react'
 import './AccountSetting.css'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { ShopContext } from '../../Context/ShopContext'
 
 const AccountSettings = () => {
+
+  const {User} = React.useContext(ShopContext)
+
   const [formData,setFormData] = useState({
-    username:"",
-    phone:"",
-    email:""
+    username:User.username,
+    email:User.email,
   })
 
   const changeHandler = (e) =>{
@@ -21,6 +24,7 @@ const SetChange = async () =>{
       headers:{
         Accept:'application/form-data',
         'Content-Type':'application/json',
+        'auth-token':`${localStorage.getItem('auth-token')}`,
       },
       body: JSON.stringify(formData),
     }).then((response)=> response.json()).then((data)=>responseData=data)
@@ -43,11 +47,6 @@ const SetChange = async () =>{
         <div className='form-group'>
           <label htmlFor='name'>Your Name: </label>
           <input name='username' value={formData.username} onChange={changeHandler}  type='text' id='name' ></input>
-        </div>
-
-        <div className='form-group'>
-          <label htmlFor='phone'>Your Phone: </label>
-          <input name="phone" value={formData.phone} onChange={changeHandler}  type='text' id="phone"></input>
         </div>
 
         <div className='form-group'>
