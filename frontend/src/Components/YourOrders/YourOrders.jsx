@@ -1,57 +1,85 @@
-import React from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import './YourOrders.css'
+import { ShopContext } from '../../Context/ShopContext';
+import { Button } from '@chatscope/chat-ui-kit-react';
+import Modal from 'react-modal';
 
 const YourOrders = () => {
-    const data = [
-        {
-            id: 112345,
-            date: '12/12/2021',
-            status: 'Delivered',
-            total: 1000
+    const customStyles = {
+        content: {
+          width: '50%', // Điều chỉnh chiều rộng của modal
+          height: '50%', // Điều chỉnh chiều cao của modal
+          top: '50%', // Dịch modal xuống dưới 50% của viewport
+          left: '50%', // Dịch modal sang phải 50% của viewport
+          transform: 'translate(-50%, -50%)', // Dịch modal để nó căn giữa
         },
-        {
-            id: 112346,
-            date: '12/12/2021',
-            status: 'On the way',
-            total: 1600
-        },
-        {
-            id: 112347,
-            date: '12/12/2021',
-            status: 'Delivered',
-            total: 2000
-        },
-        {
-            id: 112348,
-            date: '12/12/2021',
-            status: 'Cancelled',
-            total: 100
-        },
-        {
-            id: 112345,
-            date: '12/12/2021',
-            status: 'Delivered',
-            total: 1000
-        },
-        {
-            id: 112346,
-            date: '12/12/2021',
-            status: 'On the way',
-            total: 1600
-        },
-        {
-            id: 112347,
-            date: '12/12/2021',
-            status: 'Delivered',
-            total: 2000
-        },
-        {
-            id: 112348,
-            date: '12/12/2021',
-            status: 'Cancelled',
-            total: 100
-        }
-    ]
+      };
+
+  const {orderList, all_product} = useContext(ShopContext);
+
+  const [viewOrderProduct, setViewOrderProduct] = useState({'loong': 1});
+
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const handleOpenModal = (orderProducts) => {
+    if (orderProducts) {
+      setViewOrderProduct(orderProducts);
+    }
+    setModalOpen(true);
+  };
+
+  useEffect(() => {
+    console.log("viewOrderProduct", viewOrderProduct);
+  }, [viewOrderProduct]);
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
+  function ProductListModal({ orders, isOpen, onRequestClose }) {
+    return (
+      <Modal
+        isOpen={isOpen}
+        style={customStyles}
+        onRequestClose={onRequestClose}
+        contentLabel="Product List Modal"
+        
+      >
+        <div className="title-modal">
+        <h2>Product List</h2>
+        <button onClick={onRequestClose}>Close</button>
+        </div>
+        <table className='modal-table'>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  
+                {all_product.map((product, i) => {
+                   if (product.id in orders) {
+                        return (
+                            <tr key={i}>
+                                <td><img src={`${product.image}`}/></td>
+                                <td>{product.name}</td>
+                                <td>${product.price}</td>
+                                <td className='quantity-column'>{orders[product.id]}</td>
+                            </tr>
+                        )
+                      }
+                      else {
+                        return null;
+                      }
+                    })}
+                </tbody>
+            </table>
+      </Modal>
+    );
+  }
     return (
         <div className='yourorders'>
             <h1 className='mainhead1'>Your Orders</h1>
@@ -67,28 +95,33 @@ const YourOrders = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((item, index) => {
+                {orderList.map((item, index) => {
                         return (
                             <tr key={index}>
-                                <td>{item.id}</td>
-                                <td>{item.date}</td>
+                                <td>{item._id}</td>
+                                <td>{item.time}</td>
                                 <td>
                                     <p>
                                         {item.status == 'Delivered' && <span className='greendot'></span>}
-                                        {item.status == 'On the way' && <span className='yellowdot'></span>}
+                                        {item.status == 'Pending' && <span className='yellowdot'></span>}
                                         {item.status == 'Cancelled' && <span className='reddot'></span>}
                                         {item.status}
                                     </p>
                                 </td>
                                 <td>${item.total}</td>
                                 <td>
-                                    <button className='mainbutton1'>View</button>
+                                    <Button onClick={()=>handleOpenModal(item.products)} className='mainbutton1'>View</Button>
                                 </td>
                             </tr>
                         )
                     })}
                 </tbody>
             </table>
+            <ProductListModal
+            orders={viewOrderProduct}
+            isOpen={isModalOpen}
+            onRequestClose={handleCloseModal}
+            />
         </div>
     )
 }

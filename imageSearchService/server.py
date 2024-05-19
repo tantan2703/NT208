@@ -21,7 +21,7 @@ collection = db["watches"]
 fe = FeatureExtractor()
 features = []
 img_ids = []
-for feature_path in Path("imageSearchService/static/feature").glob("*.npy"):
+for feature_path in Path("static/feature").glob("*.npy"):
     features.append(np.load(feature_path))
     img_id = "/images/" + feature_path.stem + ".png"
 
@@ -81,7 +81,7 @@ def index():
 
     # Save query image
     uploaded_img_path = (
-        "imageSearchService/static/uploaded/"
+        "static/uploaded/"
         + datetime.now().isoformat().replace(":", ".")
         + "_"
         + image_filename

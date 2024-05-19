@@ -76,3 +76,59 @@
     background-color: green;
 }
 
+.title-modal {
+    display: flex;
+}
+.title-modal button {
+    margin-left: auto;
+}
+/* Đặt style chung cho bảng */
+.modal-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+  }
+  
+  /* Đặt style cho phần đầu bảng */
+  .modal-table thead {
+    background-color: #f2f2f2;
+    text-align: center;
+  }
+  
+  .modal-table th, .modal-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  /* Đặt style cho các dòng xen kẽ trong phần thân bảng */
+  .modal-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  /* Đặt style cho hình ảnh trong bảng */
+  .modal-table td img {
+    width: 50px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Đặt style cho các tiêu đề bảng */
+  .modal-table th {
+    background-color: #4CAF50;
+    color: white;
+  }
+  .modal-table .quantity-column {
+    width: 80px; /* Đặt chiều rộng mong muốn cho cột "Quantity" */
+  }
+  
+  /* Đặt style khi hover chuột lên các dòng trong bảng */
+  .modal-table tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  

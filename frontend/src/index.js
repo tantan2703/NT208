@@ -5,7 +5,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import  ShopContextProvider  from './Context/ShopContext';
 import MessageContextProvider from './Context/MessageContext';
-import AdminMessageContextProvider from './Context/AdminMessageContext';
 import AuthenticationContextProvider  from './Context/AuthenticationContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

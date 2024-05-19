@@ -22,6 +22,7 @@ import { AuthenticationContext } from "./Context/AuthenticationContext";
 import AdminSidebar from "./AdminComponents/AdminSidebar/AdminSidebar";
 import OrderPage from "./Components/OrderPage/OrderPage";
 import CheckoutPage from "./Components/Checkout/CheckoutPage";
+import AdminUpdateProductPage from "./AdminComponents/AdminUpdateProduct/AdminUpdateProduct";
 // import AdminSidebar from './AdminComponents/AdminSidebar/AdminSidebar';
 import "./Pages/CSS/AdminPage.css";
 
@@ -60,6 +61,9 @@ function App() {
           />
           <Route path="product">
             <Route path=":productId" element={<Product />} />
+          </Route>
+          <Route path="updateproduct">
+            <Route path=":productId" element={<AdminUpdateProductPage />} />
           </Route>
           <Route path="/cart" element={<Cart />} />
           <Route path="/chatpage" element={<ChatPage />} />
