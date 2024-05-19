@@ -21,6 +21,7 @@ const SetChange = async () =>{
       headers:{
         Accept:'application/form-data',
         'Content-Type':'application/json',
+        'auth-token':`${localStorage.getItem('auth-token')}`,
       },
       body: JSON.stringify(formData),
     }).then((response)=> response.json()).then((data)=>responseData=data)

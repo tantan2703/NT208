@@ -557,14 +557,30 @@ app.post('/retrain', async (req, res) => {
     }
 });
 
-app.post('/changeinfo', async(req,res)=>{
-    let user = await User.findOne({email:req.body.email});
-    user.name = req.body.username;
-    user.email = req.body.email;
-    await user.updateOne({name:user.name,email:user.email});
+app.post('/changeinfo', fetchUser, async(req,res)=>{
+    let userData = await User.findOne({ _id: req.user.id });
+    userData.name = req.body.username;
+    userData.email = req.body.email;
+    await user.updateOne({name:userData.name,email:userData.email});
     console.log("Updated User Info");
     res.json({success:true,alert:"User Info Updated"});
     //res.json({success:false,errors:"Wrong Email Id"})
+  })
+
+  app.post('/changepassword', fetchUser, async(req,res)=>{
+    let userData = await User.findOne({ _id: req.user.id });
+    const oldPassword = req.body.oldpassword;
+    const newPassword = req.body.newpassword;
+    const passCompare = await bcrypt.compare(oldPassword, userData.password);
+    if (passCompare) {
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        await User.findOneAndUpdate({ _id: req.user.id }, { password: hashedPassword });
+        res.json({success: true, message: "Password Changed Successfully"});
+    }
+    else {
+        res.json({success: false, message: "Invalid Password"});
+    }
   })
 
 
