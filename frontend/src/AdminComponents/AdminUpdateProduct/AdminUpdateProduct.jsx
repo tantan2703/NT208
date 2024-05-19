@@ -1,10 +1,22 @@
-import React, {useState} from 'react'
-import './AdminAddProduct.css'
+import React, {useState, useContext, useEffect} from 'react'
+import './AdminUpdateProduct.css'
 import upload_area from '../Assets/upload_area.svg'
+import { ShopContext } from '../../Context/ShopContext'
+import { useParams } from 'react-router-dom';
 
 
+const AdminUpdateProductPage = () => {
 
-const AdminAddProduct = () => {
+    const {all_product} = useContext(ShopContext);
+
+    const {productId} = useParams();
+
+    const [product, setProduct] = useState({});
+
+    useEffect(() => {
+        const temp_product = all_product.find((e)=> e.id === productId);
+        setProduct(temp_product);
+    }, [all_product, productId]);
 
     // Tạo một list brand
     const brandList = ['Audemars Piguet', 'Cartier', 'Tudor', 'Breitling', 'Oris',
@@ -16,6 +28,7 @@ const AdminAddProduct = () => {
     const sexList = ["Men's watch/Unisex", "Women's watch"];
 
     const [image, setImage] = useState(false);
+
     const [productDetail, setProductDetail] = useState({
         name: '',
         price: 0,
@@ -27,6 +40,11 @@ const AdminAddProduct = () => {
         sex: sexList[0],
     });
 
+    useEffect(() => {
+        if (product)
+            setProductDetail(product);
+    }, [product]);
+
     const imageHandler = (e) => {
         setImage(e.target.files[0]);
     }
@@ -35,69 +53,78 @@ const AdminAddProduct = () => {
         setProductDetail({...productDetail, [e.target.name]: e.target.value});
     }
 
-    const AddProduct = async () => {
-
-        // Check if all fields are filled
-        if (productDetail.name === '' || 
-            productDetail.price === 0 || 
-            productDetail.model === '' || 
-            productDetail.size === '' || 
-            productDetail.year === '') {
-                alert('Please fill all fields');
-                return;
-        }
-
-        // Check if there is an image
-        if (!image) {
-            alert('Please upload an image');
-            return;
-        }
-
+    const UpdateProduct = async () => {
         console.log(productDetail);
         let responseData;
-        let product = productDetail;
-        
-        let formData = new FormData();
-        formData.append('product', image);
+        let deleteResponse;
+        let updatedProduct = productDetail;
 
-        await fetch('/upload', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'auth-token':`${localStorage.getItem('auth-token')}`,
-            },
-            body: formData,
-        }).then((response) => response.json()).then((data) => {responseData = data}).catch((err) => console.log(err));
+        if (image)
+        {   let formData = new FormData();
+            formData.append('product', image);
 
-        if (responseData.success) 
+            await fetch('/upload', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'auth-token':`${localStorage.getItem('auth-token')}`,
+                },
+                body: formData,
+            }).then((response) => response.json()).then((data) => {responseData = data}).catch((err) => console.log(err));
+
+            // Delete old image
+            if (responseData.success)
+            {
+                await fetch('/deleteimage', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'auth-token':`${localStorage.getItem('auth-token')}`,
+                        Accept: 'application/json',
+                    },
+                    body: JSON.stringify({'image': product.image})
+                }).then((response) => response.json()).then((data) => {deleteResponse = data}).catch((err) => console.log(err));
+            }
+        }
+        else
         {
-            product.image = responseData.image_url;
+            responseData = {success: true, image_url: product.image};
+            deleteResponse = {success: true};
+        }
 
+        if (responseData.success && deleteResponse.success) 
+        {
+            updatedProduct.image = responseData.image_url;
             const image_filename = responseData.image_url.substring(responseData.image_url.lastIndexOf('/') + 1);
-            console.log(product);
-            await fetch('/addproduct', {
+            console.log(updatedProduct);
+            await fetch('/updateproduct', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'auth-token':`${localStorage.getItem('auth-token')}`,
                     Accept: 'application/json',
                 },
-                body: JSON.stringify(product)
+                body: JSON.stringify(updatedProduct)
             }).then((response) => response.json()).then((data) => {
-                data.success?alert('Product added successfully'):alert('Product not added')
+                data.success?alert('Product updated successfully'):alert('Product not updated')
             }).catch((err) => console.log(err));
 
             // retrain model
-            await fetch('/retrain', {
-                method: 'POST',
-                body: JSON.stringify({image_filename: image_filename}),
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
+            if (image)
+                {
+                    await fetch('/retrain', {
+                        method: 'POST',
+                        body: JSON.stringify({image_filename: image_filename}),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Accept: 'application/json',
+                        }
+                    }).then((response) => response.json()).then((data) => {
+                        console.log(data.status);
+                    }).catch((err) => console.log(err));
                 }
-            }).then((response) => response.json()).then((data) => {
-                console.log(data.status);
-            }).catch((err) => console.log(err));
+            // reload page
+            window.location.reload();
         }
     }
     
@@ -147,14 +174,14 @@ const AdminAddProduct = () => {
         </div>
         <div className="addproduct-itemfield">
             <label htmlFor="file-input">
-                <img src={image?URL.createObjectURL(image):upload_area} className='addproduct-thumbnail-image' alt="" />
+                <img src={image?URL.createObjectURL(image):(product?product.image:upload_area)} className='addproduct-thumbnail-image' alt="" />
             </label>
             <input onChange={imageHandler} type="file" name='image' id='file-input' hidden/>
         </div>
-        <button onClick={()=>{AddProduct()}} className="addproduct-btn">ADD</button>
+        <button onClick={()=>{UpdateProduct()}} className="addproduct-btn">Update</button>
     </div>
     </div>
   )
 }
 
-export default AdminAddProduct
+export default AdminUpdateProductPage

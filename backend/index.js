@@ -2,6 +2,7 @@ const port = 4000;
 const http = require('http');
 const express = require('express');
 const app = express();
+const bcrypt = require('bcryptjs');
 
 let isAdminExist = false;
 
@@ -21,6 +22,7 @@ const uuid = require("uuid");
 const Product = require('./models/Product');
 const User = require('./models/User');
 const Message = require('./models/Message');
+const Order = require('./models/Order');
 
 
 app.use(express.json());
@@ -56,7 +58,28 @@ const upload = multer({
 // Creating Upload Endpoint for images
 app.use("/images", express.static("upload/images"));
 
-app.post("/upload", upload.single("product"), (req, res) => {
+const fetchAdmin = async (req, res, next) => {
+    const token = req.header("auth-token");
+    if (!token) {
+        res.send({
+            isAdmin: false,
+            errors: "Please authenticate using a valid token",
+        });
+    }
+    else
+        try {
+            const data = jwt.verify(token, "admin");
+            req.user = data.user;
+            next();
+        } catch (error) {
+            res.send({
+                isAdmin: false,
+                errors: "Please authenticate using a valid token",
+            });
+        }
+}
+
+app.post("/upload", fetchAdmin, upload.single("product"), (req, res) => {
     res.json({
         success: 1,
         image_url: `/images/${req.file.filename}`
@@ -65,7 +88,7 @@ app.post("/upload", upload.single("product"), (req, res) => {
 
 // Add Product API
 
-app.post('/addproduct', async (req, res) => {
+app.post('/addproduct', fetchAdmin, async (req, res) => {
     const product = new Product(
         {
             id: generateID(),
@@ -94,7 +117,7 @@ app.post('/addproduct', async (req, res) => {
 );
 
 // Remove Product API
-app.post('/removeproduct', async (req, res) => {
+app.post('/removeproduct', fetchAdmin, async (req, res) => {
     const product = await Product.findOneAndDelete({ id: req.body.id });
     if (product) {
         res.json(
@@ -124,6 +147,10 @@ app.post('/removeproduct', async (req, res) => {
 // Creating Endpoint for registering a user
 app.post('/signup', async (req, res) => {
     let check = await User.findOne({ email: req.body.email });
+
+    const password = req.body.password;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
     if (check) {
         return res
         .status(400)
@@ -135,13 +162,16 @@ app.post('/signup', async (req, res) => {
         );
     }
     let cart = {};
+    let order = [];
     cart["0"] = 0;
+    order.push("0");
     const user = new User(
         {
             username: req.body.username,
             email: req.body.email,
-            password: req.body.password,
+            password: hashedPassword,
             cartData: cart,
+            orderData: order,
         }
     );
 
@@ -177,13 +207,21 @@ app.get('/adminsignup', async (req, res) => {
         return;
     }
     let cart = {};
+    let order = [];
+
+    const password = 'admin';
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     cart["0"] = 0;
+    order.push("0");
     const user = new User(
         {
             username: 'admin',
             email: 'admin',
-            password: 'admin',
+            password: hashedPassword,
             cartData: cart,
+            orderData: order,
         }
     );
 
@@ -218,7 +256,8 @@ app.post('/login', async (req, res) => {
     let user = await User.findOne({ email: req.body.email });
     if (user) 
     {
-        const passCompare = req.body.password === user.password;
+        // Dùng bcrypt để so sánh password
+        const passCompare = await bcrypt.compare(req.body.password, user.password);
         if (passCompare) 
         {
             const data = {
@@ -271,28 +310,6 @@ app.post('/login', async (req, res) => {
         
 });
 
-// Creating middleware for admin authentication
-const fetchAdmin = async (req, res, next) => {
-    const token = req.header("auth-token");
-    if (!token) {
-        res.send({
-            isAdmin: false,
-            errors: "Please authenticate using a valid token",
-        });
-    }
-    else
-        try {
-            const data = jwt.verify(token, "admin");
-            req.user = data.user;
-            next();
-        } catch (error) {
-            res.send({
-                isAdmin: false,
-                errors: "Please authenticate using a valid token",
-            });
-        }
-}
-
 // Get All Products API
 app.get('/allproducts', async (req, res) => {
     const products = await Product.find({});
@@ -300,6 +317,59 @@ app.get('/allproducts', async (req, res) => {
     console.log("All Products Fetched");
 }
 );
+
+// Delete Image API
+app.delete("/deleteimage", fetchAdmin, async (req, res) => {
+    const image = req.body.image;
+    console.log(image);
+    const image_path = path.join("upload", image);
+    fs.unlink(image_path, (err) => {
+        if (err) {
+            console.error(err);
+            res.json({success: false});
+            return;
+        }
+        res.json({success: true});
+    });
+});
+
+// Update Product API
+app.post("/updateproduct", fetchAdmin, upload.single("product"), async (req, res) => {
+    const product
+    = await Product.findOneAndUpdate(
+        { id
+            : req.body.id },
+        {
+            name: req.body.name,
+            price: req.body.price,
+            image: req.body.image,
+            brand: req.body.brand,
+            model: req.body.model,
+            year: req.body.year,
+            size: req.body.size,
+            sex: req.body.sex,
+        }
+    );
+    if (product) {
+        res.json(
+            {
+                success: true,
+                message: req.body.name,
+            }
+        );
+        console.log("Product Updated");
+    } else {
+        res.json(
+            {
+                success: false,
+                message: "Product not found",
+            }
+        );
+        console.log("Product not found");
+    }
+}
+);
+
 
 // Creating endpoint for getting all users data
 app.get('/allusers', fetchAdmin, async (req, res) => {
@@ -487,7 +557,7 @@ app.post('/retrain', async (req, res) => {
     }
 });
 
-app.post('/changeinfo',async(req,res)=>{
+app.post('/changeinfo', async(req,res)=>{
     let user = await User.findOne({email:req.body.email});
     user.name = req.body.username;
     user.email = req.body.email;
@@ -496,6 +566,51 @@ app.post('/changeinfo',async(req,res)=>{
     res.json({success:true,alert:"User Info Updated"});
     //res.json({success:false,errors:"Wrong Email Id"})
   })
+
+
+  // Creating endpoint for user to order products
+app.post('/order', fetchUser, async (req, res) => {
+    let userData = await User.findOne({ _id: req.user.id });
+    let order = new Order(
+        {
+            id: generateID(),
+            user_id: req.user.id,
+            products: req.body.products,
+            total: req.body.total,
+            fullname: req.body.fullname,
+            email: req.body.email,
+            phone: req.body.phone,
+            address: req.body.address,
+            province: req.body.province,
+            city: req.body.city,
+            ward: req.body.ward,
+            time: req.body.time,
+            status: "Pending",
+        }
+    );
+    await order.save();
+    userData.orderData.push(order._id);
+    userData.cartData = {"0": 0};
+    await User
+    .findOneAndUpdate(
+        { _id: req.user.id }, 
+        { cartData: userData.cartData},
+    );
+    await User
+    .findOneAndUpdate(
+        { _id: req.user.id }, 
+        { orderData: userData.orderData},
+    );
+    res.json({success: true, message: "Order Placed Successfully"});
+}
+);
+
+// Creating endpoint for getting order by user id
+app.post('/getorder', fetchUser, async (req, res) => {
+    let order = await Order.find({ user_id: req.user.id });
+    res.json(order);
+});
+
 
 // Authentication Middleware
 // io.use( async (socket, next) => {
@@ -589,7 +704,7 @@ io.on('connection', async (socket) => {
                 message = new Message({ user_id: decoded.user.id, messages: [] });
                 await message.save();
             }
-            await Message.updateOne(
+            await Message.findOneAndUpdate(
                 { user_id: decoded.user.id }, // Điều kiện tìm kiếm
                 {
                     $push: {
