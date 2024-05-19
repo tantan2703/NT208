@@ -13,7 +13,6 @@ const Shop = () => {
       <Hero/>
       <div className='slideshow'><SlideShow/></div>
       <NewCollections/>
-      <NewsLetter/>
     </div>
   )
 }
