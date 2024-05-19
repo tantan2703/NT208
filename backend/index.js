@@ -559,9 +559,9 @@ app.post('/retrain', async (req, res) => {
 
 app.post('/changeinfo', fetchUser, async(req,res)=>{
     let userData = await User.findOne({ _id: req.user.id });
-    userData.name = req.body.username;
+    userData.username = req.body.username;
     userData.email = req.body.email;
-    await user.updateOne({name:userData.name,email:userData.email});
+    await User.findOneAndUpdate({ _id: req.user.id }, {username:userData.username, email:userData.email});
     console.log("Updated User Info");
     res.json({success:true,alert:"User Info Updated"});
     //res.json({success:false,errors:"Wrong Email Id"})
