@@ -8,13 +8,13 @@ import os
 def train():
     fe = FeatureExtractor()
 
-    for img_path in sorted(Path("backend/upload/images").glob("*.png")):
+    for img_path in sorted(Path("../backend/upload/images").glob("*.png")):
         try:
             print(img_path)  # e.g., ./static/img/xxx.png
             feature = fe.extract(img=Image.open(img_path))
 
             # Tạo đường dẫn đến thư mục static/feature
-            feature_dir = Path("imageSearchService/static/feature")
+            feature_dir = Path("static/feature")
 
             # Tạo đường dẫn cho file feature
             feature_path = feature_dir / (img_path.stem + ".npy")
@@ -31,12 +31,12 @@ def train_image(image_filename):
 
     print(image_filename)
 
-    image_path = "backend/upload/images/" + image_filename
+    image_path = "../backend/upload/images/" + image_filename
 
     try:
         fe = FeatureExtractor()
         feature = fe.extract(img=Image.open(image_path))
-        feature_dir = Path("imageSearchService/static/feature")
+        feature_dir = Path("static/feature")
         feature_path = feature_dir / (image_filename.split('.')[0] + ".npy")
         feature_dir.mkdir(parents=True, exist_ok=True)
         np.save(feature_path, feature)
