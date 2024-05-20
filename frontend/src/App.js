@@ -23,8 +23,10 @@ import AdminSidebar from "./AdminComponents/AdminSidebar/AdminSidebar";
 import OrderPage from "./Components/OrderPage/OrderPage";
 import CheckoutPage from "./Components/Checkout/CheckoutPage";
 import AdminUpdateProductPage from "./AdminComponents/AdminUpdateProduct/AdminUpdateProduct";
+import AdminCheckProduct from "./AdminComponents/AdminCheckProduct/AdminCheckProduct";
 // import AdminSidebar from './AdminComponents/AdminSidebar/AdminSidebar';
 import "./Pages/CSS/AdminPage.css";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const { isAdmin } = useContext(AuthenticationContext);
@@ -44,6 +46,7 @@ function App() {
           <Route path="/addproduct" element={<AdminAddProduct />} />
           <Route path="/listproduct" element={<AdminListProduct />} />
           <Route path="/adminchatpage" element={<AdminChatPage />} />
+          <Route path="/admincheckproduct" element={<AdminCheckProduct />} />
           <Route path="/" element={<Shop />} />
           {/* <Route path='/admin' element={<AdminPage/>}/> */}
 
