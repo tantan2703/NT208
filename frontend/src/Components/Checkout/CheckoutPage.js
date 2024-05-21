@@ -16,7 +16,6 @@ const CheckoutPage = () => {
     const [wards, setWards] = useState([]);
 
     // Tạo các biến để lưu thông tin đơn hàng
- 
     const [orderDetail, setOrderDetail] = useState({
         fullname: '',
         email: '',
@@ -29,6 +28,11 @@ const CheckoutPage = () => {
         total: totalCartAmount,
         products: cartItems,
     });
+
+    useEffect(() => {
+        setOrderDetail({...orderDetail, total: totalCartAmount});
+    }
+    , [totalCartAmount])
 
     const changHandler = (e) => { 
         setOrderDetail({...orderDetail, [e.target.name]: e.target.value});
@@ -45,10 +49,6 @@ const CheckoutPage = () => {
         alert('Order successfully'); 
         window.location.replace('/');
     }
-
-    useEffect(() => {
-        setOrderDetail({...orderDetail, total: totalCartAmount});
-    }, [totalCartAmount])
 
     useEffect(() => {
         setOrderDetail({...orderDetail, products: cartItems});
@@ -75,8 +75,14 @@ const CheckoutPage = () => {
             }
         }
 
-        setOrderDetail({...orderDetail, total: totalCartAmount});
-
+        // Check email format
+        let email = order.email;
+        let emailFormat = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        if(!email.match(emailFormat)){
+            alert('Invalid email format');
+            return;
+        }
+        
         await fetch('/order', {
             method: 'POST',
             headers:{
@@ -154,6 +160,10 @@ const CheckoutPage = () => {
         else
         return null;
       })}
+        <div className="cartitems-total-item">
+            <h3>Total</h3>
+            <h3>${totalCartAmount}</h3>
+        </div>
       </div>
     
 

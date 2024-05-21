@@ -17,7 +17,7 @@ const YourOrders = () => {
 
   const {orderList, all_product} = useContext(ShopContext);
 
-  const [viewOrderProduct, setViewOrderProduct] = useState({'loong': 1});
+  const [viewOrderProduct, setViewOrderProduct] = useState({products: {}});
 
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -27,10 +27,6 @@ const YourOrders = () => {
     }
     setModalOpen(true);
   };
-
-  useEffect(() => {
-    console.log("viewOrderProduct", viewOrderProduct);
-  }, [viewOrderProduct]);
 
   const handleCloseModal = () => {
     setModalOpen(false);
@@ -46,9 +42,13 @@ const YourOrders = () => {
         
       >
         <div className="title-modal">
-        <h2>Product List</h2>
+        <h2>{orders._id}</h2>  
         <button onClick={onRequestClose}>Close</button>
         </div>
+            <p>Fullname:  {orders.fullname}</p>
+            <p>Time:  {orders.time}</p>
+            <p>Total:  {orders.total}</p>
+            <p>Status:  {orders.status}</p>
         <table className='modal-table'>
                 <thead>
                     <tr>
@@ -61,13 +61,13 @@ const YourOrders = () => {
                 <tbody>
                   
                 {all_product.map((product, i) => {
-                   if (product.id in orders) {
+                   if (product.id in orders.products) {
                         return (
                             <tr key={i}>
                                 <td><img src={`${product.image}`}/></td>
                                 <td>{product.name}</td>
                                 <td>${product.price}</td>
-                                <td className='quantity-column'>{orders[product.id]}</td>
+                                <td className='quantity-column'>{orders.products[product.id]}</td>
                             </tr>
                         )
                       }
@@ -110,7 +110,7 @@ const YourOrders = () => {
                                 </td>
                                 <td>${item.total}</td>
                                 <td>
-                                    <Button onClick={()=>handleOpenModal(item.products)} className='mainbutton1'>View</Button>
+                                    <Button onClick={()=>handleOpenModal(item)} className='mainbutton1'>View</Button>
                                 </td>
                             </tr>
                         )

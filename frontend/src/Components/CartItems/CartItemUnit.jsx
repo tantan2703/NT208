@@ -4,7 +4,7 @@ import { ShopContext } from '../../Context/ShopContext'
 
 const CartItemUnit = ({props, quantity}) => {
 
-  const {removeFromCart} = useContext(ShopContext);
+  const {removeFromCart, removeAllFromCart, addToCart} = useContext(ShopContext);
 
   return (
     <div className="product-card">
@@ -27,14 +27,14 @@ const CartItemUnit = ({props, quantity}) => {
           <p className="product-size">Size {props.size}</p>
           <div>
             <span className="quantity-label">Quantity:</span>
-            <button className="quantity-button decrease-button">-</button>
+            <button onClick={()=>{removeFromCart(props.id)}} className="quantity-button decrease-button">-</button>
             <span className="quantity-value">{quantity}</span>
-            <button className="quantity-button increase-button">+</button>
+            <button onClick={()=>{addToCart(props.id)}} className="quantity-button increase-button">+</button>
           </div>
         </div>
         <div className="fav-remove">
-          <button className="add-to-favorites">Move to Favorites</button>
-          <button onClick={()=>{removeFromCart(props.id)}} className="remove-button">Remove</button>
+          {/* <button className="add-to-favorites">Move to Favorites</button> */}
+          <button onClick={()=>{removeAllFromCart(props.id)}} className="remove-button">Remove</button>
         </div>
       </div>
     </div>

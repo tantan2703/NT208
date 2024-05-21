@@ -20,6 +20,12 @@ const AdminSidebar = () => {
                 <p>Product List</p>
             </div>
         </Link>
+        <Link to={'/admincheckorder'} >
+            <div className="sidebar-item">
+                <img src={list_product_icon} alt="" />
+                <p>Check Orders</p>
+            </div>
+        </Link>
         <Link to={'/adminchatpage'} >
             <div className="sidebar-item">
                 <img src={chat_icon} className='chat-icon' alt="" />

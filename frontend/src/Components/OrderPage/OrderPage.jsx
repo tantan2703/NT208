@@ -19,20 +19,20 @@ const OrderPage = () => {
 
   const {orderList, all_product} = useContext(ShopContext);
 
-  const [viewOrderProduct, setViewOrderProduct] = useState({'loong': 1});
+  const [viewOrder, setViewOrder] = useState({'loong': 1});
 
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const handleOpenModal = (orderProducts) => {
-    if (orderProducts) {
-      setViewOrderProduct(orderProducts);
+  const handleOpenModal = (order) => {
+    if (order) {
+      setViewOrder(order);
     }
     setModalOpen(true);
   };
 
   useEffect(() => {
-    console.log("viewOrderProduct", viewOrderProduct);
-  }, [viewOrderProduct]);
+    console.log("viewOrderProduct", viewOrder);
+  }, [viewOrder]);
 
   const handleCloseModal = () => {
     setModalOpen(false);
@@ -48,9 +48,14 @@ const OrderPage = () => {
         
       >
         <h2>Product List</h2>
+            <p>{orders._id}</p>
+            <p>{orders.fullname}</p>
+            <p>{orders.time}</p>
+            <p>{orders.status}</p>
+            <p>{orders.total}</p>
         
             {all_product.map((product, i) => {       
-              if (product.id in orders) {
+              if (product.id in orders.products) {
                 return <div key={i} className="listproduct-format-main listproduct-format">
                 <img src={`${product.image}`} alt="" className="listproduct-product-icon" />
                 <p>{product.name}</p>
@@ -83,13 +88,13 @@ const OrderPage = () => {
             <p>{order.time}</p>
             <p>{order.status}</p>
             <p>{order.total}</p>
-            <Button onClick={()=>handleOpenModal(order.products)}>View</Button>
+            <Button onClick={()=>handleOpenModal(order)}>View</Button>
           </div>
           })}
         </div>
     </div>
     <ProductListModal
-        orders={viewOrderProduct}
+        orders={viewOrder}
         isOpen={isModalOpen}
         onRequestClose={handleCloseModal}
       />

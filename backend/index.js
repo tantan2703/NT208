@@ -458,6 +458,24 @@ app.post('/removefromcart', fetchUser, async (req, res) => {
     
 });
 
+// creating endpoint for removing an entire product from cartdata
+app.post('/removeallfromcart', fetchUser, async (req, res) => {
+    let userData = await User.findOne({ _id: req.user.id });
+    if (req.body.itemId in userData.cartData) {
+        delete userData.cartData[req.body.itemId];
+        await User
+        .findOneAndUpdate(
+            { _id: req.user.id }, 
+            { cartData: userData.cartData},
+        );
+        res.send("Product Removed from Cart");
+    }
+    else {
+        res.send("Product not found in cart");
+    }
+
+});
+
 
 // Creating endpoint for getting cartdata
 app.post('/getcart', fetchUser, async (req, res) => {
@@ -567,21 +585,21 @@ app.post('/changeinfo', fetchUser, async(req,res)=>{
     //res.json({success:false,errors:"Wrong Email Id"})
   })
 
-  app.post('/changepassword', fetchUser, async(req,res)=>{
-    let userData = await User.findOne({ _id: req.user.id });
-    const oldPassword = req.body.oldpassword;
-    const newPassword = req.body.newpassword;
-    const passCompare = await bcrypt.compare(oldPassword, userData.password);
-    if (passCompare) {
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(newPassword, salt);
-        await User.findOneAndUpdate({ _id: req.user.id }, { password: hashedPassword });
-        res.json({success: true, message: "Password Changed Successfully"});
-    }
-    else {
-        res.json({success: false, message: "Invalid Password"});
-    }
-  })
+app.post('/changepassword', fetchUser, async(req,res)=>{
+let userData = await User.findOne({ _id: req.user.id });
+const oldPassword = req.body.oldpassword;
+const newPassword = req.body.newpassword;
+const passCompare = await bcrypt.compare(oldPassword, userData.password);
+if (passCompare) {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    await User.findOneAndUpdate({ _id: req.user.id }, { password: hashedPassword });
+    res.json({success: true, message: "Password Changed Successfully"});
+}
+else {
+    res.json({success: false, message: "Invalid Password"});
+}
+})
 
 
   // Creating endpoint for user to order products
@@ -627,6 +645,39 @@ app.post('/getorder', fetchUser, async (req, res) => {
     res.json(order);
 });
 
+app.get('/getallorder', fetchAdmin, async (req, res) => {
+    let order = await Order.find({});
+    res.json(order);
+});
+
+app.post('/confirmorder', fetchAdmin, async (req, res) => {
+    let order = await Order
+    .findOneAndUpdate(
+        { id
+            : req.body.id },
+        {
+            status: "Confirmed",
+        }
+    );
+    if (order) {
+        res.json(
+            {
+                success: true,
+                message: "Order Confirmed",
+            }
+        );
+        console.log("Order Confirmed");
+    } else {
+        res.json(
+            {
+                success: false,
+                message: "Order not found",
+            }
+        );
+        console.log("Order not found");
+    }
+}
+);
 
 // Authentication Middleware
 // io.use( async (socket, next) => {
