@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import add_product_icon from '../Assets/Product_Cart.svg'
 import list_product_icon from '../Assets/Product_list_icon.svg'
 import chat_icon from '../Assets/chat_icon.png'
+import check_order_icon from '../Assets/customer-order-icon.png'
 
 const AdminSidebar = () => {
   return (
@@ -22,7 +23,7 @@ const AdminSidebar = () => {
         </Link>
         <Link to={'/admincheckorder'} >
             <div className="sidebar-item">
-                <img src={list_product_icon} alt="" />
+                <img src={check_order_icon} alt="" />
                 <p>Check Orders</p>
             </div>
         </Link>

@@ -155,11 +155,7 @@ const AdminCheckOrder = () => {
                     >
                       Confirm
                     </button>
-                  ) : (
-                    <button className="btn btn-success mx-2" disabled>
-                      Confirmed
-                    </button>
-                  )}
+                  ) : null}
                 {/* <button
                   className="btn btn-danger mx-2"
                   onClick={() => handleDelete(order.id)}

@@ -20,6 +20,12 @@
     gap: 20px;
     cursor: pointer;
 }
+
+.sidebar-item img{
+    width: 40px;
+    height: 40px;   
+}
+
 .chat-icon{
     width: 42px;
     height: 42px;
