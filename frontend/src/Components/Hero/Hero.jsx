@@ -1,29 +1,17 @@
 import React from "react";
 import "./Hero.css";
-import hand_icon from "../Assets/hand_icon.png";
-import arrow_icon from "../Assets/arrow.png";
-import hero_image from "../Assets/hero_image.png";
+import video from "../../images/video.mp4";
 
 const Hero = () => {
   return (
     <div className="hero">
-      <div className="hero-left">
-        <h2>NEW ARRIVALS ONLY</h2>
-        <div>
-          <div className="hero-hand-icon">
-            <p>new</p>
-            <img src={hand_icon} alt="" />
-          </div>
-          <p>collection</p>
-          <p>for everyone</p>
-        </div>
-        <div className="hero-lastest-btn">
-          <div>Lastest collection</div>
-          <img src={arrow_icon} alt="" />
-        </div>
-      </div>
-      <div className="hero-right">
-        <img src={hero_image} alt="" />
+      <video className="hero_video" src={video} autoPlay muted loop />
+      <div className="hero_content">
+        <button className="hero_btn1">Breaking news</button>
+        <h2 className="hero_h2">Tempor Consectetur Est Elit</h2>
+        <p className="hero_p">
+          Dec 24, 2022<button className="hero_btn2">5 mins read</button>
+        </p>
       </div>
     </div>
   );
