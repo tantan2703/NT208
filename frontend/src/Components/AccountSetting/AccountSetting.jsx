@@ -17,6 +17,13 @@ const AccountSettings = () => {
   }
   
 const SetChange = async () =>{
+    // Check email format
+    const emailFormat = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if(!emailFormat.test(formData.email)){
+      alert("Invalid Email Format")
+      return;
+    }
+
     console.log("signup Function Excuted",formData);
     let responseData;
     await fetch('/changeinfo',{
@@ -37,7 +44,6 @@ const SetChange = async () =>{
     }
   
   }
-
 
   return (
     <div className='accountsettings'>
