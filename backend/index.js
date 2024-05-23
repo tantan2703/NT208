@@ -576,6 +576,10 @@ app.post('/retrain', async (req, res) => {
 });
 
 app.post('/changeinfo', fetchUser, async(req,res)=>{
+    if (req.body.email === 'admin') {
+        res.json({success:false,errors:"Invalid Email"});
+        return;
+    }
     let userData = await User.findOne({ _id: req.user.id });
     userData.username = req.body.username;
     userData.email = req.body.email;
