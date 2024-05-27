@@ -3,6 +3,7 @@ import './CheckoutPage.css';
 import VietnamData from './ProvinceList';
 import { ShopContext } from '../../Context/ShopContext';
 import CartItemUnit from '../CartItems/CartItemUnit';
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 
 const CheckoutPage = () => {
@@ -14,7 +15,12 @@ const CheckoutPage = () => {
     const [province, setProvince] = useState('');
     const [cities, setCities] = useState([]);
     const [wards, setWards] = useState([]);
-
+    const orderContant = {
+        payment: {
+            later_money: 'COD',
+            paypal: 'PayPal'
+        }
+    };
     // Tạo các biến để lưu thông tin đơn hàng
     const [orderDetail, setOrderDetail] = useState({
         fullname: '',
@@ -96,6 +102,18 @@ const CheckoutPage = () => {
         }).catch((err) => console.log(err));
 
     }
+    const initialOptions = {
+        "client-id": "AXrlcvr_dTb5w3-t7gnzHYE5WssHnB3-sCXl_CoWieedGitUMN_gGyE0R2XDT2b1LbbkllYDSYwWMeww",
+        "enable-funding": "card",
+        "disable-funding": "paylater,venmo",
+        "data-sdk-integration-source": "integrationbuilder_sc",
+    };
+    const [message, setMessage] = useState("");
+    const serverURL = "http://localhost:4000"
+    // Renders errors or successfull transactions on the screen.
+    function Message({ content }) {
+        return <p>{content}</p>;
+    }
 
     
     
@@ -149,7 +167,117 @@ const CheckoutPage = () => {
                 }
             </select>
         </div>
-        <button onClick={()=>{AddOrder()}} className="addproduct-btn">Complete Order</button>
+                <div className="addproduct-itemfield">
+            <p>Payment Method</p>
+                <select
+                    value={orderDetail.checkout_type}
+                    onChange={(e) => setOrderDetail({ ...orderDetail, checkout_type: e.target.value })}
+                    name='checkout_type'
+                    className='addproduct-selector'
+                >
+                    {Object.keys(orderContant.payment).map((key, index) => (
+                        <option key={index} value={orderContant.payment[key]}>
+                            {orderContant.payment[key]}
+                        </option>
+                    ))}
+                </select>
+        </div>
+        {orderDetail.checkout_type === orderContant.payment.paypal && (
+            <div className='paypal-btn'>
+                <PayPalScriptProvider options={initialOptions}>
+                        <PayPalButtons
+                        style={{
+                            shape: "rect",
+                            layout: "vertical",
+                        }}
+                        createOrder={async () => {
+                            try {
+                                let order = orderDetail;
+                            const response = await fetch(`${serverURL}/api/orders`, {
+                                method: "POST", mode:'cors',
+                                headers: {
+                                "Content-Type": "application/json",
+                                },
+                                // use the "body" param to optionally pass additional order information
+                                // like product ids and quantities
+                                body: JSON.stringify(order)
+                            });
+
+                            const orderData = await response.json();
+
+                            if (orderData.id) {
+                                return orderData.id;
+                            } else {
+                                const errorDetail = orderData?.details?.[0];
+                                const errorMessage = errorDetail
+                                ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
+                                : JSON.stringify(orderData);
+
+                                throw new Error(errorMessage);
+                            }
+                            } catch (error) {
+                            console.error(error);
+                            setMessage(`Could not initiate PayPal Checkout...${error}`);
+                            }
+                        }}
+                        onApprove={async (data, actions) => {
+                            try {
+                            const response = await fetch(
+                                `${serverURL}/api/orders/${data.orderID}/capture`,
+                                {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                },
+                                console.log(data)
+                            );
+
+                            const orderData = await response.json();
+                            // Three cases to handle:
+                            //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
+                            //   (2) Other non-recoverable errors -> Show a failure message
+                            //   (3) Successful transaction -> Show confirmation or thank you message
+
+                            const errorDetail = orderData?.details?.[0];
+
+                            if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
+                                // (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
+                                // recoverable state, per https://developer.paypal.com/docs/checkout/standard/customize/handle-funding-failures/
+                                return actions.restart();
+                            } else if (errorDetail) {
+                                // (2) Other non-recoverable errors -> Show a failure message
+                                throw new Error(
+                                `${errorDetail.description} (${orderData.debug_id})`,
+                                );
+                            } else {
+                                // (3) Successful transaction -> Show confirmation or thank you message
+                                // Or go to another URL:  actions.redirect('thank_you.html');
+                                const transaction =
+                                orderData.purchase_units[0].payments.captures[0];
+                                alert(`Transaction ${transaction.status}: ${transaction.id}. OrderSuccess`,)
+                                // console.log(
+                                // "Capture result",
+                                // orderData,
+                                // JSON.stringify(orderData, null, 2),
+                                // );
+                                AddOrder()
+                            }
+                            } catch (error) {
+                            console.error(error);
+                            setMessage(
+                                `Sorry, your transaction could not be processed...${error}`,
+                            );
+                            }
+                        }}
+                        />
+                </PayPalScriptProvider>
+                <Message content={message} />                      
+            </div>
+        )}
+        {orderDetail.checkout_type === orderContant.payment.later_money && (
+            <button onClick={AddOrder} className="addproduct-btn">Complete Order</button>
+        )}
     </div>
     <div className="Items-cart">
       {all_product.map((e, index)=>{
