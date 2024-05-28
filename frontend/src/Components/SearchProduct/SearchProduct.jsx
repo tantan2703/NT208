@@ -10,8 +10,6 @@ import "../SearchBar/SearchBar.css";
 import "./SearchProduct.css";
 import iconsearch from "../Assets/iconsearch.png";
 import iconImageSearch from "../Assets/imageSearchIcon.png";
-import SingleBanner from "../Banners/Banner";
-import banner_img from "../Assets/jeremy-budiman-unsplash.jpg";
 
 const HomePage = (props) => {
   const [search, setSearch] = useState("");
@@ -72,6 +70,7 @@ const HomePage = (props) => {
       .then((response) => response.json())
       .then((data) => setViewProductIds(data.scores));
   };
+
 
   useEffect(() => {
     console.log(viewProductIds);
