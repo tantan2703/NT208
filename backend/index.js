@@ -624,6 +624,7 @@ app.post('/order', fetchUser, async (req, res) => {
             ward: req.body.ward,
             time: req.body.time,
             status: "Pending",
+            payment: req.body.payment,
         }
     );
     await order.save();

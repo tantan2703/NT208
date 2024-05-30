@@ -4,8 +4,20 @@ import { ShopContext } from '../../Context/ShopContext'
 import CartItemUnit from './CartItemUnit'
 
 const CartItems = () => {
+    
     // Chuyển hướng đến trang checkout
     const handleCheckout = () => {
+      // Check Login
+        if (!localStorage.getItem('auth-token')) {
+          alert('You need to login to view cart');
+          window.location.href = '/login';
+          return;
+      }
+      // Check Cart
+      if (Object.keys(cartItems).length === 1) {
+          alert('Your cart is empty');
+          return;
+      }
         window.location.href = '/checkout';
     }
 
@@ -50,13 +62,6 @@ const CartItems = () => {
               </div>
             </div>
             <button onClick={handleCheckout} >PROCEED TO CHECKOUT</button>
-        </div>
-        <div className="cartitems-promocode">
-          <p>If you have a promo code, Enter it here</p>
-          <div className="cartitems-promobox">
-            <input type="text" placeholder="promo code" name="" id="" />
-            <button>Submit</button>
-          </div>
         </div>
       </div>
       </div>

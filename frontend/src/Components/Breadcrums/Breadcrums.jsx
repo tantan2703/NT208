@@ -7,8 +7,7 @@ const Breadcrums = (props) => {
     return (
       <nav aria-label="Breadcrumb" className="flex gap-5 self-start text-sm leading-5">
       <BreadcrumbItem href="/">Home</BreadcrumbItem>
-      <BreadcrumbItem href="/shop">Shop</BreadcrumbItem>
-      <div className="flex-auto">Productss type</div>
+      <BreadcrumbItem href="/watches">Shop</BreadcrumbItem>
       <div className="text-zinc-900">Detail</div>
     </nav>
   )

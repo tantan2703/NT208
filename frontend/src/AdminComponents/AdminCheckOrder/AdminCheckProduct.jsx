@@ -128,8 +128,10 @@ const AdminCheckOrder = () => {
             <th scope="col">ID</th>
             <th scope="col">NAME</th>
             <th scope="col">PRICE</th>
+            <th scope="col">PAYMENT</th>
             <th scope="col">STATUS</th>
             <th scope="col">ACTION</th>
+
           </tr>
         </thead>
         <tbody>
@@ -140,6 +142,7 @@ const AdminCheckOrder = () => {
               </th>
               <td>{order.fullname}</td>
               <td>{order.total}</td>
+              <td>{order.payment}</td>
               <td>{order.status}</td>
               <td>
                 <button

@@ -58,11 +58,11 @@ const Login = () => {
       </div> 
       <button onClick={()=>{login()}}>Continue</button>
       
-      <p className="loginsignup-login">Forgot your password?  </p>
+      {/* <p className="loginsignup-login">Forgot your password?  </p> */}
       <p className="loginsignup-login">Read the <span >Privacy Policy</span> for further information </p>
       <div className="loginsignup-agree">
-        <input type="checkbox" name="" id="" />
-        <p>By continue, i agree to the terms of use & privacy policy.</p>
+        {/* <input type="checkbox" name="" id="" /> */}
+        <p>By continue, I agree to the terms of use & privacy policy.</p>
       </div>
     </div>
     

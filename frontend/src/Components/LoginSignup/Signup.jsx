@@ -9,11 +9,37 @@ const Signup = () => {
     email:""
   })
 
+  const [checked, setChecked] = useState(false);
+
+  const handleCheckboxChange = (event) => {
+    setChecked(event.target.checked);
+  };
+
   const changeHandler = (e) =>{
     setFormData({...formData,[e.target.name]:e.target.value})
   }
   
 const signup = async () =>{
+    // Check for empty fields
+    if (!formData.username || !formData.email || !formData.password) {
+      alert('Please fill all the fields');
+      return;
+    }
+    // // Check for password strength
+    // if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~!@#$%^&*,-/+=])[A-Za-z\d@$!%*?&]{8,}$/.test(formData.password)) {
+    //   alert('Password is not strong enough');
+    //   return;
+    // }
+    // Check for email
+    if (!/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/.test(formData.email)) {
+      alert('Invalid email');
+      return;
+    }
+    // Check for checkbox
+    if (!checked) {
+      alert('Please agree to the terms and conditions');
+      return;
+    }
     console.log("signup Function Excuted",formData);
     let responseData;
     await fetch('/signup',{
@@ -40,7 +66,7 @@ const signup = async () =>{
     <p className="loginsignup-login">Already have an account? <span onClick={() => { window.location.href = "/login" }}>Login here</span> </p>
       <div className="loginsignup-fields">
         <p >Required field*</p>
-        <p className='label'>Title*</p>
+        {/* <p className='label'>Title*</p>
         <div className="option">
 
         <input type="radio" id='mr'name='mr' value='mr'/>
@@ -64,7 +90,7 @@ const signup = async () =>{
               <option value="#">Ngày</option>
               <option value="option2">Option 2</option>
               <option value="option3">Option 3</option>
-          </select>
+          </select> */}
           <input name='username' value={formData.username} onChange={changeHandler} type="text" placeholder='Your Name' />
           <input name='email' value={formData.email} onChange={changeHandler} type="email" placeholder='Email Address' />
           <ul>
@@ -78,10 +104,11 @@ const signup = async () =>{
       </div> 
       <button onClick={()=>{signup()}}>Continue</button>
       
-      <p className="loginsignup-login">Forgot your password?  </p>
+      {/* <p className="loginsignup-login">Forgot your password?  </p> */}
       <p className="loginsignup-login">Read the <span >Privacy Policy</span> for further information </p>
       <div className="loginsignup-agree">
-        <input type="checkbox" name="" id="" />
+        <input type="checkbox" checked={checked}
+          onChange={handleCheckboxChange} />
         <p>I would also like to receive marketing information about Cartier's 
           products or services.
 

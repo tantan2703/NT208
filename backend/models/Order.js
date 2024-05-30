@@ -14,6 +14,7 @@ const OrderSchema = new mongoose.Schema({
   ward: String,
   time: String,
   status: String,
+  payment: String,
 }, {timestamps: true
 });
 

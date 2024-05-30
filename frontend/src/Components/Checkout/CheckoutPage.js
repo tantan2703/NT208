@@ -33,6 +33,7 @@ const CheckoutPage = () => {
         time: new Date().toLocaleString(),
         total: totalCartAmount,
         products: cartItems,
+        payment: orderContant.payment.later_money
     });
 
     useEffect(() => {
@@ -170,9 +171,9 @@ const CheckoutPage = () => {
                 <div className="addproduct-itemfield">
             <p>Payment Method</p>
                 <select
-                    value={orderDetail.checkout_type}
-                    onChange={(e) => setOrderDetail({ ...orderDetail, checkout_type: e.target.value })}
-                    name='checkout_type'
+                    value={orderDetail.payment}
+                    onChange={changHandler}
+                    name='payment'
                     className='addproduct-selector'
                 >
                     {Object.keys(orderContant.payment).map((key, index) => (
@@ -182,7 +183,7 @@ const CheckoutPage = () => {
                     ))}
                 </select>
         </div>
-        {orderDetail.checkout_type === orderContant.payment.paypal && (
+        {orderDetail.payment === orderContant.payment.paypal && (
             <div className='paypal-btn'>
                 <PayPalScriptProvider options={initialOptions}>
                         <PayPalButtons
@@ -275,7 +276,7 @@ const CheckoutPage = () => {
                 <Message content={message} />                      
             </div>
         )}
-        {orderDetail.checkout_type === orderContant.payment.later_money && (
+        {orderDetail.payment === orderContant.payment.later_money && (
             <button onClick={AddOrder} className="addproduct-btn">Complete Order</button>
         )}
     </div>

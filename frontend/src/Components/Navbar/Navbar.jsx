@@ -37,7 +37,8 @@ const Navbar = () => {
       {localStorage.getItem('auth-token')
         ? <button onClick={()=>{setIsAdmin(false);setAuthToken(null);localStorage.removeItem('auth-token');window.location.replace("/")}}>Logout</button> 
       :<Link to='/login'><button>Login</button></Link>}
-        <Link to='/profile/overview'><img src={user_icon} alt="" className='user_icon'/></Link>
+        {localStorage.getItem('auth-token')
+        ? <Link to='/profile/overview'><img src={user_icon} alt="" className='user_icon'/></Link>:null}
         <Link to='/cart'><img src={cart_icon} alt="" className='cart_icon'/></Link>
         <div className="nav-cart-count">{getTotalCartItems()}</div>
         <Link to='/chatpage'><img className='chat-icon' src={chat_icon} alt="" /></Link>

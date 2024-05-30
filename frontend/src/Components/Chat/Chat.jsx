@@ -10,6 +10,12 @@ const Chat = () => {
     const {addMessage, allMessages} = useContext(MessageContext);
 
 function sendMessage(e){
+    // Check for login
+    if (!localStorage.getItem('auth-token')) {
+        alert('You need to login to chat');
+        window.location.href = '/login';
+        return;
+    }
     console.log(e);
     addMessage(e, true, localStorage.getItem('auth-token'));
 }
@@ -21,7 +27,7 @@ function sendMessage(e){
                 <Avatar>
                     <img src={AdminIcon} className='admin-icon' alt="" />
                 </Avatar>
-                <ConversationHeader.Content userName='Jonh' info='last active 10 mins ago'>
+                <ConversationHeader.Content userName='Admin'>
 
                 </ConversationHeader.Content>
 

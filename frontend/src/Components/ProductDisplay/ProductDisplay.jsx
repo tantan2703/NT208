@@ -9,6 +9,18 @@ const ProductDisplay = (props) => {
 
     const {product} = props;
     const {addToCart} = useContext(ShopContext)
+
+    const addToCartButton = (productId) => {
+      // Check for login
+      if (!localStorage.getItem('auth-token')) {
+        alert('You need to login to add to cart');
+        window.location.href = '/login';
+        return;
+      }
+
+      addToCart(productId);
+    }
+
   return (
     <div className='productdisplay'>
       <div className="productdisplay-left">
@@ -24,7 +36,7 @@ const ProductDisplay = (props) => {
         <div className="productdisplay-right-prices">
             <div className="productdisplay-right-price-new">${product.price}</div>
         </div>
-        <button onClick={()=>{addToCart(product.id)}}>ADD TO CART</button>
+        <button onClick={()=>{addToCartButton(product.id)}}>ADD TO CART</button>
         <p className='productdisplay-right-category'><span>Year :</span>{product.year}</p>
         <p className='productdisplay-right-category'><span>Sex :</span>{product.sex}</p>
 
