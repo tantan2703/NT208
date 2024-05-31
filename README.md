@@ -73,4 +73,10 @@ Setup MongoDB: - Tải và cài đặt MongoDB Community Server - https://fastdl
         - email: admin
         - password: admin
 
+    Tài khoản Paypal test:
+        - email: sb-msgne30855276@personal.example.com
+        - password: nFzc9.Vy
+
+    Link web đã deploy: https://deploynt208frontend.onrender.com/watches
+
 
