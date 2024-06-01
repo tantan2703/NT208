@@ -28,7 +28,19 @@
 
     - MongoDB: https://www.mongodb.com/docs/
 
-## B. Sơ đồ chức năng trang web
+    - Socket.io: https://socket.io/docs/v4/
+
+    - Paypal: https://developer.paypal.com/docs/api/overview/
+
+    - Python: https://www.python.org/
+
+    - Tensorflow: https://www.tensorflow.org/
+
+    - Keras: https://keras.io/
+
+    - Flask: https://flask.palletsprojects.com/en/2.1.x/
+
+## B. Chức năng trang web
 
 **Sơ đồ**
 (https://www.mindmeister.com/app/map/3185286379?t=Evq4KLqB6k)
