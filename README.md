@@ -134,24 +134,24 @@ Sử dụng mô hình Trích xuất/Truy xuất đặc trưng
 
     - Tìm kiếm sản phẩm bằng hình ảnh
 
-![Image Search Example](ImageForReadme\imageSearchExample.png)
+![imageSearchExample](https://github.com/tantan2703/NT208/assets/112810508/a743d75a-3e68-4d3b-b78e-ec87ceedb4e1)
 
     - Related Watches
 
-![Related Watch Example](ImageForReadme\relatedWatchExample.png)
+![relatedWatchExample](https://github.com/tantan2703/NT208/assets/112810508/02ef96cc-e3d9-47e8-9000-b3e1261dc835)
 
 Sử dụng Websocket
 
     - Chat giữa admin và user
 
-![Chat Example](ImageForReadme\adminChatExample.png)
+![adminChatExample](https://github.com/tantan2703/NT208/assets/112810508/dc802d61-a881-4566-bda7-4e751a60f511)
 
     - Chat giữa user và admin
 
-![Chat Example](ImageForReadme\userChatExample.png)
+![userChatExample](https://github.com/tantan2703/NT208/assets/112810508/a7d9e049-7709-48b0-a60b-d725f603fd5f)
 
 Sử dụng API của Paypal
 
     - Thanh toán qua Paypal
 
-![Paypal Example](ImageForReadme\paypalExample.png)
+![PayPalExample](https://github.com/tantan2703/NT208/assets/112810508/2747dc45-0242-4014-96b3-ede64a79b7ad)
