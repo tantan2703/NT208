@@ -123,6 +123,11 @@ Setup MongoDB:
             - email: admin
             - password: admin
 
+Tài khoản test Paypal:
+
+    - email: sb-msgne30855276@personal.example.com
+    - password: nFzc9.Vy
+
 ## C. Các chức năng làm tiêu chí cộng điểm
 
 Sử dụng mô hình Trích xuất/Truy xuất đặc trưng
