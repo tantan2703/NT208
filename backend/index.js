@@ -86,6 +86,43 @@ app.post("/upload", fetchAdmin, upload.single("product"), (req, res) => {
     });
 });
 
+// Only used for testing/add product quickly
+app.post("/sampleupload", upload.single("product"), (req, res) => {
+    res.json({
+        success: 1,
+        image_url: `/images/${req.file.filename}`
+    });
+});
+
+// Only used for testing/add product quickly
+app.post('/sampleaddproduct', async (req, res) => {
+    const product = new Product(
+        {
+            id: generateID(),
+            name: req.body.name,
+            price: req.body.price,
+            image: req.body.image,
+            brand: req.body.brand,
+            model: req.body.model,
+            year: req.body.year,
+            sex: req.body.sex,
+            size: req.body.size,
+            available: req.body.available,
+        }
+    )
+    console.log(product);
+    await product.save();
+    console.log('Saved');
+    res.json(
+        {
+            success: true,
+            name: req.body.name,
+        }
+    );
+    
+}
+);
+
 // Add Product API
 
 app.post('/addproduct', fetchAdmin, async (req, res) => {
