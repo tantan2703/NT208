@@ -3,21 +3,37 @@ from feature_extractor import FeatureExtractor
 from pathlib import Path
 import numpy as np
 import os
+from pymongo import MongoClient
+import requests
 
+# Connect to MongoDB
+client = MongoClient("mongodb://localhost:27017")
+db = client["WatchShop"]
+collection = db["watches"]
 
+watches = collection.find()
+
+    
 def train():
     fe = FeatureExtractor()
 
-    for img_path in sorted(Path("../backend/upload/images").glob("*.png")):
+    for watch in watches:
         try:
+            img_path = watch['image']
             print(img_path)  # e.g., ./static/img/xxx.png
-            feature = fe.extract(img=Image.open(img_path))
+            feature = fe.extract(img=Image.open(requests.get("http://localhost:4000" + img_path, stream=True).raw))
 
             # Tạo đường dẫn đến thư mục static/feature
             feature_dir = Path("static/feature")
 
+            img_path = img_path.split('/')[-1]
+
+            img_path = img_path.split('.')[0]
+
             # Tạo đường dẫn cho file feature
-            feature_path = feature_dir / (img_path.stem + ".npy")
+            feature_path = feature_dir / (img_path + ".npy")
+
+            print(feature_path)
 
             # Tạo thư mục nếu nó chưa tồn tại
             feature_dir.mkdir(parents=True, exist_ok=True)
@@ -31,11 +47,11 @@ def train_image(image_filename):
 
     print(image_filename)
 
-    image_path = "../backend/upload/images/" + image_filename
+    image_path = "/images/" + image_filename
 
     try:
         fe = FeatureExtractor()
-        feature = fe.extract(img=Image.open(image_path))
+        feature = fe.extract(img=Image.open(requests.get("http://localhost:4000" + image_path, stream=True).raw))
         feature_dir = Path("static/feature")
         feature_path = feature_dir / (image_filename.split('.')[0] + ".npy")
         feature_dir.mkdir(parents=True, exist_ok=True)

@@ -99,6 +99,9 @@ const AdminAddProduct = () => {
                 console.log(data.status);
             }).catch((err) => console.log(err));
         }
+        else {
+            alert(responseData.message);
+        }
     }
     
   return (
